@@ -1,0 +1,97 @@
+{
+  "name": "Task Notifications | Notion → Slack",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "authentication": "oAuth2",
+        "dataSourceId": {
+          "__rl": true,
+          "value": "3b984c93-9d62-80fa-978c-000be9b92ec4",
+          "mode": "list",
+          "cachedResultName": "Internship Tasks",
+          "cachedResultUrl": "https://app.notion.com/p/3b984c939d62809889f5eecea125c90d"
+        }
+      },
+      "type": "n8n-nodes-base.notionTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "a6ff752e-58d9-408c-b4ff-259818b576f5",
+      "name": "Notion Trigger",
+      "credentials": {
+        "notionOAuth2Api": {
+          "id": "lOx7s3ruLZEHxCzH",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://slack.com/api/chat.postMessage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer xoxb-REPLACE_WITH_YOUR_SLACK_BOT_TOKEN"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"channel\": \"C0BP04QJT2B\",\n  \"text\": \"🚀 New Notion Task Created\\n\\n📌 Task: {{ $json['Task Name'] }}\\n📊 Status: {{ $json['Status'] }}\\n⚡ Priority: {{ $json['Priority'] }}\\n📅 Due Date: {{ $json['Due Date']?.start || 'Not set' }}\\n👤 Assignee: {{ $json['Assignee']?.join(', ') || 'Not assigned' }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "cc39fc97-113a-4f4c-b3a5-67e25ca14f58",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Notion Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "ea0bb6ad-b87d-4182-b65d-ee1577dc892b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8b0b6f195176716ba819839ac825041c37e4d4563c2837e00548dbfa77e59711"
+  },
+  "nodeGroups": [],
+  "id": "SfcgvAYEjatEtYrB",
+  "tags": []
+}

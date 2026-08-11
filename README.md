@@ -6,6 +6,15 @@ Each day is stored in its own folder containing the workflows, API collections, 
 
 ---
 
+## Daily Log
+
+| Day | Topic | Folder |
+|-----|-------|--------|
+| **Day 3** | Git & GitHub, API fundamentals, Postman, n8n Lead Management CRUD API, open-source workflow audit | [`Day-03/`](Day-03/) |
+| **Day 5** | Slack & Notion — three n8n automations: task notifications, client onboarding, and Google Form → Notion registration | [`Day-05/`](Day-05/) |
+
+---
+
 ## Project Overview
 
 This repository documents a hands-on internship in AI automation. The focus is on building real, working backends without writing a traditional server — using **n8n** for workflow orchestration, **Google Sheets** as a lightweight data store, and **Postman** for API testing and documentation.
@@ -32,24 +41,29 @@ Day 3 delivers a complete **Lead Management REST API**: four endpoints, full CRU
 AI-Automation-Internship/
 │
 ├── README.md
-└── Day-03/
-    ├── GitHub/
-    │   ├── Open Source Repository Link.txt
-    │   ├── Fork Repository Link.txt
-    │   ├── Pull Request Link.txt
-    │   └── Screenshots/
-    ├── Postman/
-    │   ├── MATalogics Lead Management API.postman_collection.json
-    │   ├── Environment.postman_environment.json
-    │   └── Screenshots/
-    ├── n8n/
-    │   ├── Lead Management Workflow.json
-    │   └── Workflow Screenshot.png
-    ├── Google Sheets/
-    │   ├── Google Sheet Link.txt
-    │   └── Sheet Screenshot.png
-    └── Report/
-        └── Day-03 Report.docx
+├── Day-03/
+│   ├── GitHub/
+│   │   ├── Open Source Repository Link.txt
+│   │   ├── Fork Repository Link.txt
+│   │   ├── Pull Request Link.txt
+│   │   └── Screenshots/
+│   ├── Postman/
+│   │   ├── MATalogics Lead Management API.postman_collection.json
+│   │   ├── Environment.postman_environment.json
+│   │   └── Screenshots/
+│   ├── n8n/
+│   │   ├── Lead Management Workflow.json
+│   │   └── Workflow Screenshot.png
+│   ├── Google Sheets/
+│   │   ├── Google Sheet Link.txt
+│   │   └── Sheet Screenshot.png
+│   └── Report/
+│       └── Day-03 Report.docx
+└── Day-05/
+    ├── n8n/                # 3 workflow JSONs + screenshots
+    ├── Slack/              # channel screenshots
+    ├── Notion/             # database export + screenshots
+    └── README.md
 ```
 
 ---
