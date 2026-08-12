@@ -108,7 +108,8 @@
           "mappingMode": "defineBelow",
           "value": {
             "id": "={{ $json.id }}",
-            "Performance Score": "={{ $json.newPerformanceScore }}"
+            "Performance Score": "={{ $json.newPerformanceScore }}",
+            "Status": "Active"
           },
           "matchingColumns": [
             "id"
