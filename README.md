@@ -12,6 +12,7 @@ Each day is stored in its own folder containing the workflows, API collections, 
 |-----|-------|--------|
 | **Day 3** | Git & GitHub, API fundamentals, Postman, n8n Lead Management CRUD API, open-source workflow audit | [`Day-03/`](Day-03/) |
 | **Day 5** | Slack & Notion — three n8n automations: task notifications, client onboarding, and Google Form → Notion registration | [`Day-05/`](Day-05/) |
+| **Day 6** | Airtable as a no-code database + n8n — CRUD operations and five automation workflows (leads, onboarding, projects, AI-agent monitoring, internship tracker) | [`Day-06/`](Day-06/) |
 
 ---
 
@@ -59,10 +60,14 @@ AI-Automation-Internship/
 │   │   └── Sheet Screenshot.png
 │   └── Report/
 │       └── Day-03 Report.docx
-└── Day-05/
-    ├── n8n/                # 3 workflow JSONs + screenshots
-    ├── Slack/              # channel screenshots
-    ├── Notion/             # database export + screenshots
+├── Day-05/
+│   ├── n8n/                # 3 workflow JSONs + screenshots
+│   ├── Slack/              # channel screenshots
+│   ├── Notion/             # database export + screenshots
+│   └── README.md
+└── Day-06/
+    ├── Airtable/           # 5-table base screenshots
+    ├── n8n/                # 6 workflow JSONs + automation-result screenshots
     └── README.md
 ```
 

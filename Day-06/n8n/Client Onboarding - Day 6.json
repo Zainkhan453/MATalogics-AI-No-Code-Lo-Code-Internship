@@ -1,0 +1,272 @@
+{
+  "name": "Client Onboarding - Day 6",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "authentication": "airtableOAuth2Api",
+        "baseId": {
+          "__rl": true,
+          "value": "appJj8ZtYpwC8W3MM",
+          "mode": "id"
+        },
+        "tableId": {
+          "__rl": true,
+          "value": "tblQvlrCtee0s8Mjo",
+          "mode": "id"
+        },
+        "triggerField": "Created Time",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.airtableTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "03da555a-20fe-42af-b0f5-4a30fa47544b",
+      "name": "Airtable Trigger",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "owaVvrwlVZOIgFmL",
+          "name": "Airtable account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const record = $input.first().json;\n\n// Create unique client ID using date + short Airtable record ID\nconst date = new Date();\n\nconst year = date.getFullYear();\nconst month = String(date.getMonth() + 1).padStart(2, '0');\nconst day = String(date.getDate()).padStart(2, '0');\n\nconst shortId = record.id\n  .replace('rec', '')\n  .slice(-4)\n  .toUpperCase();\n\nconst clientId = `CL-${year}${month}${day}-${shortId}`;\n\nreturn [\n  {\n    json: {\n      ...record,\n      generatedClientId: clientId\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "85498713-dcd9-46c9-9d30-d53cb37135dd",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appJj8ZtYpwC8W3MM",
+          "mode": "list",
+          "cachedResultName": "MATalogics AI Operations Base",
+          "cachedResultUrl": "https://airtable.com/appJj8ZtYpwC8W3MM"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblQvlrCtee0s8Mjo",
+          "mode": "list",
+          "cachedResultName": "Clients",
+          "cachedResultUrl": "https://airtable.com/appJj8ZtYpwC8W3MM/tblQvlrCtee0s8Mjo"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.id }}",
+            "Client ID": "={{ $json.generatedClientId }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Client ID",
+              "displayName": "Client ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Active",
+                  "value": "Active"
+                },
+                {
+                  "name": "Inactive",
+                  "value": "Inactive"
+                },
+                {
+                  "name": "Onboarding",
+                  "value": "Onboarding"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Created Time",
+              "displayName": "Created Time",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "e3bf4476-527b-4584-abc1-da148636e62c",
+      "name": "Update record",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "owaVvrwlVZOIgFmL",
+          "name": "Airtable account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0BPMAK5MUM",
+          "mode": "id"
+        },
+        "text": "=✅ New Client Onboarded  \nClient ID: {{ $json.fields[\"Client ID\"] }} \nName: {{ $json.fields[\"Name\"] }} \nCompany: {{ $json.fields[\"Company\"] }} \nEmail: {{ $json.fields[\"Email\"] }} \nStatus: {{ $json.fields[\"Status\"] }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.7,
+      "position": [
+        672,
+        0
+      ],
+      "id": "69ce902d-bb7b-494f-a03f-c9fd43e967a0",
+      "name": "Send a message",
+      "webhookId": "2454a4e4-ebce-4d36-b37e-2199764da8ff",
+      "credentials": {
+        "slackApi": {
+          "id": "41J5iqWTFdGd2zgI",
+          "name": "Slack account 11"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Airtable Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Update record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update record": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "049ffa9f-8eb4-4feb-a08d-2225655a328a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8b0b6f195176716ba819839ac825041c37e4d4563c2837e00548dbfa77e59711"
+  },
+  "nodeGroups": [],
+  "id": "Qhua4fyoBuHHEJ3p",
+  "tags": []
+}

@@ -1,0 +1,94 @@
+{
+  "name": "Project Tracking - Day 6",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "authentication": "airtableOAuth2Api",
+        "baseId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "appJj8ZtYpwC8W3MM"
+        },
+        "tableId": {
+          "__rl": true,
+          "value": "tblA3lVvJ2LMJxhMp",
+          "mode": "id"
+        },
+        "triggerField": "Last Modified",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.airtableTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "4eb23cb7-ce70-4d3a-87af-7232e2375ce6",
+      "name": "Airtable Trigger",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "owaVvrwlVZOIgFmL",
+          "name": "Airtable account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "zaynbaloch89@gmail.com",
+        "subject": "=Project Status Update: {{ $json.fields[\"Project Name\"] }}",
+        "message": "=Project Status Update  Project: {{ $json.fields[\"Project Name\"] }} Assigned To: {{ $json.fields[\"Assigned To\"] }} Current Status: {{ $json.fields[\"Status\"] }} Deadline: {{ $json.fields[\"Deadline\"] }} Last Updated: {{ $json.fields[\"Last Modified\"] }}  This is an automated project tracking notification from the MATalogics AI Operations System.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "99bbceff-6da7-4472-8908-68de885e8d84",
+      "name": "Send a message",
+      "webhookId": "464e0410-d8e4-4e28-b0e1-b4519cb50c42",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "n6uaua6VfLjK2sD5",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Airtable Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "38c0aefe-7911-4a9f-8ba1-ad8533d38d6d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8b0b6f195176716ba819839ac825041c37e4d4563c2837e00548dbfa77e59711"
+  },
+  "nodeGroups": [],
+  "id": "xaC08Yj2aLoFz8Pq",
+  "tags": []
+}

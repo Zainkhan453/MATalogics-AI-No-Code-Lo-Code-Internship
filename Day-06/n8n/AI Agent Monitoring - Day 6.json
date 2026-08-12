@@ -1,0 +1,97 @@
+{
+  "name": "AI Agent Monitoring - Day 6",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "authentication": "airtableOAuth2Api",
+        "baseId": {
+          "__rl": true,
+          "value": "appJj8ZtYpwC8W3MM",
+          "mode": "id"
+        },
+        "tableId": {
+          "__rl": true,
+          "value": "tbloZo4hBzh9jmAEC",
+          "mode": "id"
+        },
+        "triggerField": "=Last Updated",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.airtableTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "cc995197-8bf7-4679-89d9-c67121e44549",
+      "name": "Airtable Trigger",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "owaVvrwlVZOIgFmL",
+          "name": "Airtable account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0BPMGTGACV",
+          "mode": "id"
+        },
+        "text": "=🤖 AI Agent Status Update\n\nAgent Name: {{ $json.fields[\"Agent Name\"] }}\nAgent Type: {{ $json.fields[\"Type\"] }}\nDeployment Status: {{ $json.fields[\"Deployment Status\"] }}\nLast Updated: {{ DateTime.fromISO($json.fields[\"Last Updated\"]).setZone(\"Asia/Karachi\").toFormat(\"dd/MM/yyyy hh:mm a\") }}\n\nThe deployment status has been updated in the MATalogics AI Operations System.",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.7,
+      "position": [
+        224,
+        0
+      ],
+      "id": "ff9fe2c2-9059-43f9-84b8-c4a6cd91316e",
+      "name": "Send a message",
+      "webhookId": "1cee7caa-2622-4dca-b7f3-02d1c74ada68",
+      "credentials": {
+        "slackApi": {
+          "id": "41J5iqWTFdGd2zgI",
+          "name": "Slack account 11"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Airtable Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "9462d641-bda5-43ad-806b-fb16089bfee2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8b0b6f195176716ba819839ac825041c37e4d4563c2837e00548dbfa77e59711"
+  },
+  "nodeGroups": [],
+  "id": "6Mpsc0WdbEjm8lYq",
+  "tags": []
+}
