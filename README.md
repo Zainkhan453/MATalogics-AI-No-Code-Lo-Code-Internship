@@ -13,6 +13,7 @@ Each day is stored in its own folder containing the workflows, API collections, 
 | **Day 3** | Git & GitHub, API fundamentals, Postman, n8n Lead Management CRUD API, open-source workflow audit | [`Day-03/`](Day-03/) |
 | **Day 5** | Slack & Notion — three n8n automations: task notifications, client onboarding, and Google Form → Notion registration | [`Day-05/`](Day-05/) |
 | **Day 6** | Airtable as a no-code database + n8n — CRUD operations and five automation workflows (leads, onboarding, projects, AI-agent monitoring, internship tracker) | [`Day-06/`](Day-06/) |
+| **Day 7** | End-to-end AI Client Onboarding System — Vapi voice agent → n8n → OpenAI classification → Airtable + Notion + Slack, with priority-based alerts | [`Day-07/`](Day-07/) |
 
 ---
 
@@ -65,9 +66,16 @@ AI-Automation-Internship/
 │   ├── Slack/              # channel screenshots
 │   ├── Notion/             # database export + screenshots
 │   └── README.md
-└── Day-06/
-    ├── Airtable/           # 5-table base screenshots
-    ├── n8n/                # 6 workflow JSONs + automation-result screenshots
+├── Day-06/
+│   ├── Airtable/           # 5-table base screenshots
+│   ├── n8n/                # 6 workflow JSONs + automation-result screenshots
+│   └── README.md
+└── Day-07/
+    ├── n8n/                # AI Client Onboarding workflow JSON + execution screenshot
+    ├── Vapi/               # voice-agent config + system-prompt screenshot
+    ├── Airtable/           # Client Onboarding table screenshots
+    ├── Notion/             # Client Projects database screenshots
+    ├── Slack/              # priority-based notification screenshots
     └── README.md
 ```
 

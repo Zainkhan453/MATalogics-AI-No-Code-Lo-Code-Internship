@@ -1,0 +1,517 @@
+{
+  "name": "AI Client Onboarding System",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "client-onboarding",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c773c2d0-8373-4135-af15-393c802c433c",
+      "name": "Webhook",
+      "webhookId": "409bcac6-edbd-4d9b-9c6d-74d12654439d"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5cb747f5-2332-4f3b-ae16-5d1b5138b52a",
+              "name": "transcript",
+              "value": "={{ $json.body.message.artifact.transcript }}",
+              "type": "string"
+            },
+            {
+              "id": "b6f5526f-22a9-45cc-afa6-ad47d0e81c49",
+              "name": "call_id",
+              "value": "={{ $json.body.message.artifact.variables.call.id }}",
+              "type": "string"
+            },
+            {
+              "id": "a6c4c97f-bd77-4685-8458-ce8ee18a912e",
+              "name": "call_ended_reason",
+              "value": "={{ $json.body.message.endedReason }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "8c0d6344-e566-4dc2-b94a-6d39f0eedf4c",
+      "name": "Prepare Vapi Call Data"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an AI Client Intake Processor for MATalogics.\n\nYou receive a transcript from a bilingual English/Urdu voice onboarding conversation.\n\nYour job is to extract, normalize, translate, and professionally structure the client's information.\n\nThe client may speak:\n\n- English\n- Urdu\n- Roman Urdu\n- A mixture of Urdu and English\n\n## Important Language and Transliteration Rules\n\nAll final output values must be written in clear professional English using the Latin alphabet.\n\n- If information is spoken or transcribed in Urdu script, translate or transliterate it into English/Latin script as appropriate.\n- Client names written or transcribed in Urdu script MUST be transliterated into their natural English/Roman spelling.\n- Company names written or transcribed in Urdu script MUST be transliterated into their natural English/Roman spelling.\n- If the transcript already contains an English/Roman spelling of the client's name or company name, prefer that spelling instead of generating a different transliteration.\n- Do not translate the meaning of personal names or brand/company names. Transliterate them instead.\n- Preserve names and company names that are already written in English.\n- Email addresses must not be translated or transliterated. Preserve the final confirmed email address exactly, except convert alphabetic characters to lowercase.\n- Service, project description, service category, summary, and next action must always be returned in professional English.\n- Never return Urdu script in any final output field.\n\nExamples:\n\n\"احمد رضا\" → \"Ahmed Raza\"\n\"علی احمد\" → \"Ali Ahmed\"\n\"زین خان\" → \"Zain Khan\"\n\nFor company names, transliterate the spoken company name into Latin script while preserving it as a proper name.\n\nTranslate Urdu or Roman Urdu descriptions and requirements into professional English.\n\n## Required Client Information\n\nExtract the following:\n\n1. client_name\n2. company\n3. email\n4. service\n5. description\n6. budget\n\n## Extraction Rules\n\n### Client Name\n\nExtract the final confirmed client name.\n\nIf the name is transcribed in Urdu script, transliterate it into its natural English/Roman spelling.\n\nIf both Urdu and English/Roman versions appear in the transcript, prefer the confirmed English/Roman spelling.\n\nDo not translate the meaning of the person's name.\n\nThe final client_name must use the Latin alphabet.\n\n### Company\n\nExtract the final confirmed company name.\n\nIf the company name is transcribed in Urdu script, transliterate it into English/Latin characters.\n\nIf an English/Roman version of the company name appears elsewhere in the transcript, prefer that spelling.\n\nDo not translate the meaning of a brand or company name unless the client explicitly provides an English version.\n\nThe final company value must use the Latin alphabet.\n\n### Email\n\nUse the email address that was explicitly confirmed by the client.\n\nIf the caller initially spelled an email incorrectly but the assistant reconstructed it and the client explicitly confirmed that reconstructed email, use the confirmed version.\n\nReturn the email in lowercase.\n\nDo not translate, transliterate, or otherwise modify the confirmed email address.\n\n### Service\n\nConvert the client's requested service into a concise professional English service name.\n\nExamples:\n\n- AI Customer Support Chatbot\n- Website Development\n- Mobile Application Development\n- Web & Mobile Development\n- AI Voice Agent\n- Workflow Automation\n- Custom Software Development\n\nDo not invent a service.\n\n### Project Description\n\nGenerate a concise professional English description based only on the client's actual requirements.\n\nTranslate Urdu or Roman Urdu requirements into professional English.\n\nRemove:\n\n- speech-to-text errors\n- unnecessary repetition\n- filler words\n- broken sentences\n\nDo not add requirements that were not mentioned.\n\nThe final description must not contain Urdu script.\n\n### Budget\n\nReturn the client's approximate budget as a numeric PKR value only.\n\nUnderstand both English and common Pakistani Urdu budget expressions.\n\nExamples:\n\n- 6 lakh → 600000\n- 3 lakh → 300000\n- 1 lakh → 100000\n- 500k → 500000\n- 1 million → 1000000\n- 2.5 lakh → 250000\n\nDo not include commas, currency symbols, or the word PKR in the numeric value.\n\n## AI Classification\n\nGenerate:\n\n### service_category\n\nAssign a clear broader service category based on the client's requirement.\n\nExamples:\n\n- AI & Automation\n- Web Development\n- Mobile Development\n- Web & Mobile Development\n- Custom Software Development\n\nThe service category must be in English.\n\n### summary\n\nGenerate a concise one-sentence professional English summary of the client's requirement.\n\nThe summary must be entirely in English, including transliterated client and company names where they are mentioned.\n\n### next_action\n\nRecommend one practical next action for the MATalogics team.\n\nExamples:\n\n- Schedule technical consultation\n- Arrange discovery call\n- Prepare solution proposal\n- Review technical requirements\n- Schedule product demonstration\n\nDo not generate lead priority here. Priority will be calculated separately using deterministic budget rules.\n\n## Final Validation\n\nBefore returning the result, verify that:\n\n- client_name uses Latin/English characters.\n- company uses Latin/English characters.\n- email is the confirmed email address.\n- service is in English.\n- description is in English.\n- budget is numeric.\n- service_category is in English.\n- summary is in English.\n- next_action is in English.\n- No Urdu script appears anywhere in the final JSON output.\n\n## Required Output\n\nReturn valid JSON only.\n\nUse exactly this structure:\n\n{\n  \"client_name\": \"\",\n  \"company\": \"\",\n  \"email\": \"\",\n  \"service\": \"\",\n  \"description\": \"\",\n  \"budget\": 0,\n  \"service_category\": \"\",\n  \"summary\": \"\",\n  \"next_action\": \"\"\n}\n\nDo not include markdown.\nDo not include explanations.\nDo not include additional keys.\n\n## Transcript\n\n{{ $json.transcript }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        448,
+        0
+      ],
+      "id": "b57115de-ba01-4977-836a-480050e61a42",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "builtInTools": {},
+        "options": {
+          "temperature": 0.1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        320,
+        208
+      ],
+      "id": "7a7d5878-7c05-4ad0-85ec-172bc7fe8590",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "GQaoHcKd99gIZj2i",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const rawOutput = $json.output;\n\nlet data;\n\ntry {\n  data = typeof rawOutput === 'string'\n    ? JSON.parse(rawOutput)\n    : rawOutput;\n} catch (error) {\n  throw new Error('AI Agent returned invalid JSON');\n}\n\nconst budget = Number(data.budget);\n\nif (!Number.isFinite(budget)) {\n  throw new Error('Invalid budget received from AI Agent');\n}\n\nlet priority;\n\nif (budget >= 500000) {\n  priority = 'HIGH';\n} else if (budget >= 200000) {\n  priority = 'MEDIUM';\n} else {\n  priority = 'LOW';\n}\n\nreturn [\n  {\n    json: {\n      ...data,\n      priority,\n      status: 'New'\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        0
+      ],
+      "id": "3c31b03b-7551-4fda-b55b-502f049dbe09",
+      "name": "Calculate Lead Priority"
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appfk7NGpeD1EaAPU",
+          "mode": "list",
+          "cachedResultName": "AI Client Onboarding System",
+          "cachedResultUrl": "https://airtable.com/appfk7NGpeD1EaAPU"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblTH9a2NsYwV26Rx",
+          "mode": "list",
+          "cachedResultName": "Client Onboarding",
+          "cachedResultUrl": "https://airtable.com/appfk7NGpeD1EaAPU/tblTH9a2NsYwV26Rx"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Client Name": "={{ $json.client_name }}",
+            "Company": "={{ $json.company }}",
+            "Email": "={{ $json.email }}",
+            "Service": "={{ $json.service }}",
+            "Description": "={{ $json.description }}",
+            "Budget": "={{ $json.budget }}",
+            "Category": "={{ $json.service_category }}",
+            "Priority": "={{ $json.priority }}",
+            "Summary": "={{ $json.summary }}",
+            "Status": "={{ $json.status }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Client Name",
+              "displayName": "Client Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Service",
+              "displayName": "Service",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Budget",
+              "displayName": "Budget",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Priority",
+              "displayName": "Priority",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "HIGH",
+                  "value": "HIGH"
+                },
+                {
+                  "name": "MEDIUM",
+                  "value": "MEDIUM"
+                },
+                {
+                  "name": "LOW",
+                  "value": "LOW"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "New",
+                  "value": "New"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Created At",
+              "displayName": "Created At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        944,
+        0
+      ],
+      "id": "6d6fc162-2eea-4737-a351-e9f628396634",
+      "name": "Create Client Record",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "owaVvrwlVZOIgFmL",
+          "name": "Airtable account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "databasePage",
+        "dataSourceId": {
+          "__rl": true,
+          "value": "3bb84c93-9d62-80a7-a813-000b82db1b40",
+          "mode": "list",
+          "cachedResultName": "Client Projects",
+          "cachedResultUrl": "https://app.notion.com/p/3bb84c939d6280c28f2efaa590c2d578"
+        },
+        "title": "={{ $('Calculate Lead Priority').item.json.company }}",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Client|rich_text",
+              "textContent": "={{ $('Calculate Lead Priority').item.json.client_name }}"
+            },
+            {
+              "key": "Email|email",
+              "emailValue": "={{ $('Calculate Lead Priority').item.json.email }}"
+            },
+            {
+              "key": "Service|rich_text",
+              "textContent": "={{ $('Calculate Lead Priority').item.json.service }}"
+            },
+            {
+              "key": "Budget|number",
+              "numberValue": "={{ $('Calculate Lead Priority').item.json.budget }}"
+            },
+            {
+              "key": "Priority|select",
+              "selectValue": "={{ $('Calculate Lead Priority').item.json.priority }}"
+            },
+            {
+              "key": "Summary|rich_text",
+              "textContent": "={{ $('Calculate Lead Priority').item.json.summary }}"
+            },
+            {
+              "key": "Next Action|rich_text",
+              "textContent": "={{ $('Calculate Lead Priority').item.json.next_action }}"
+            },
+            {
+              "key": "Status|select",
+              "selectValue": "={{ $('Calculate Lead Priority').item.json.status }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 3,
+      "position": [
+        1168,
+        0
+      ],
+      "id": "617cc7c4-d700-4b2a-88cd-2d1ab16cffe4",
+      "name": "Create a database page",
+      "credentials": {
+        "notionOAuth2Api": {
+          "id": "lOx7s3ruLZEHxCzH",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0BQYBGP05N",
+          "mode": "id"
+        },
+        "text": "={{ $json.slack_message }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.7,
+      "position": [
+        1568,
+        0
+      ],
+      "id": "c658995d-a506-409d-93c8-176e7ca2a5df",
+      "name": "Send a message",
+      "webhookId": "5dd023ed-eaee-4b0c-a478-7464e497fd99",
+      "credentials": {
+        "slackApi": {
+          "id": "41J5iqWTFdGd2zgI",
+          "name": "Slack account 11"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $('Calculate Lead Priority').item.json;\n\nlet heading;\n\nif (data.priority === 'HIGH') {\n  heading = '🔥 HIGH PRIORITY CLIENT';\n} else if (data.priority === 'MEDIUM') {\n  heading = '⚠️ MEDIUM PRIORITY CLIENT';\n} else {\n  heading = '✅ STANDARD CLIENT';\n}\n\nconst budgetFormatted = Number(data.budget).toLocaleString('en-PK');\n\nreturn [\n  {\n    json: {\n      slack_message: `${heading}\n\n${data.client_name} - ${data.company}\n\nService: ${data.service}\nBudget: PKR ${budgetFormatted}\nPriority: ${data.priority}\n\nAI Summary: ${data.summary}\n\nNext Action: ${data.next_action}\n\n✅ Airtable + Notion records created successfully.`\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        0
+      ],
+      "id": "aa4bbb08-2dbf-4eb4-93af-080fba5ebd34",
+      "name": "Prepare Slack Message"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Prepare Vapi Call Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Vapi Call Data": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Calculate Lead Priority",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Lead Priority": {
+      "main": [
+        [
+          {
+            "node": "Create Client Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Client Record": {
+      "main": [
+        [
+          {
+            "node": "Create a database page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a database page": {
+      "main": [
+        [
+          {
+            "node": "Prepare Slack Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Slack Message": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "edd2edfe-33e4-4f2a-b39b-edf0264ca47d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8b0b6f195176716ba819839ac825041c37e4d4563c2837e00548dbfa77e59711"
+  },
+  "nodeGroups": [],
+  "id": "ELRKLzas5fnbKSkP",
+  "tags": []
+}
