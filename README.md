@@ -83,9 +83,14 @@ MATalogics-AI-No-Code-Lo-Code-Internship/
 └── Day 8-11/
     ├── Task Brief - Days 8-11.pdf
     ├── README.md            # nine-project progress tracker
-    └── 1. INTERFACE + FORM + TABLE  LEAD INTAKE SYSTEM/
+    ├── 1. INTERFACE + FORM + TABLE  LEAD INTAKE SYSTEM/
         ├── Workflow/        # exported Zap JSON
         ├── Screenshots/     # non-sensitive evidence
+        ├── Zapier Form Link.md
+        └── README.md
+    └── 2. INTERFACE + FORM + TABLE  EMPLOYEE EXPENSE APPROVAL/
+        ├── Workflow/        # sanitized exported Zap JSON
+        ├── Screenshots/     # non-sensitive workflow/test evidence
         ├── Zapier Form Link.md
         └── README.md
 ```

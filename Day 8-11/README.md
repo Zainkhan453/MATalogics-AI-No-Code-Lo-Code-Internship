@@ -9,7 +9,7 @@ The complete assignment is available in [Task Brief - Days 8-11.pdf](Task%20Brie
 | # | Project | Module | Status |
 |---|---------|--------|--------|
 | 1 | [Lead Intake System](1.%20INTERFACE%20%2B%20FORM%20%2B%20TABLE%20%20LEAD%20INTAKE%20SYSTEM/) | Interface + Form + Table | Completed |
-| 2 | Employee Expense Approval | Interface + Form + Table | Planned |
+| 2 | [Employee Expense Approval](2.%20INTERFACE%20%2B%20FORM%20%2B%20TABLE%20%20EMPLOYEE%20EXPENSE%20APPROVAL/) | Interface + Form + Table | Completed |
 | 3 | AI Customer Support Bot | Chatbot | Planned |
 | 4 | AI Appointment Booking Assistant | Chatbot | Planned |
 | 5 | Customer Onboarding Pipeline | Kanban + Form Automation | Planned |
@@ -34,7 +34,7 @@ From the repository root:
 ```bash
 git pull --rebase origin main
 git add "Day 8-11"
-git commit -m "Days 8-11: complete Task 2 - Employee Expense Approval"
+git commit -m "Days 8-11: complete Task 3 - AI Customer Support Bot"
 git push origin main
 ```
 

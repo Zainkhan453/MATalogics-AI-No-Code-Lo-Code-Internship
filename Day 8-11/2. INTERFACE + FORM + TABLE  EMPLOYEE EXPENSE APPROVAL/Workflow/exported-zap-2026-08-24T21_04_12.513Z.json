@@ -1,0 +1,1236 @@
+{
+  "metadata": {
+    "version": 2
+  },
+  "zaps": [
+    {
+      "id": 1,
+      "title": "Employee Expense Approval System",
+      "nodes": {
+        "1": {
+          "id": 1,
+          "paused": false,
+          "type_of": "read",
+          "params": {
+            "formId": "cmt71ln4l00015c0io2n4pbly",
+            "pageId": "cmt71lmq1000j91glq6rq4fgh",
+            "projectId": "cmt71lm7j0026ljomrgwj1fur"
+          },
+          "meta": {
+            "timezone": "America/Los_Angeles",
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "formId": "Employee Expense Portal",
+              "pageId": "Employee Expense Portal",
+              "projectId": "Employee Expense Portal"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": null,
+          "root_id": null,
+          "action": "new_form_submission",
+          "selected_api": "InterfacesCLIAPI@1.9.1",
+          "title": "When a new Employee Expense Portal submission is created",
+          "authentication_id": null
+        },
+        "2": {
+          "id": 2,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "packages_enabled": false,
+            "input": {
+              "employee_name": "{{=output[\"377435123\"][\"values\"][\"cmt71vxlz000a356v5wdsi818\"]}}",
+              "employee_email": "{{=output[\"377435123\"][\"values\"][\"cmt71vxlz000b356vx9960dbk\"]}}",
+              "department": "{{=output[\"377435123\"][\"values\"][\"cmt71vxlz000c356v7oqfan2e\"]}}",
+              "expense_type": "{{=output[\"377435123\"][\"values\"][\"cmt71vxm0000d356vpuo2rab9\"]}}",
+              "amount": "{{=output[\"377435123\"][\"values\"][\"cmt71vxm0000e356v0tupwl86\"]}}",
+              "expense_date": "{{=output[\"377435123\"][\"values\"][\"cmt71vxm0000f356vccieza6y\"]}}",
+              "description": "{{=output[\"377435123\"][\"values\"][\"cmt71vxm0000g356vy0809sdk\"]}}",
+              "receipt": "{{=output[\"377435123\"][\"values\"][\"cmt71vxm1000h356vppf55o4q\"]}}",
+              "manager_email": "{{=output[\"377435123\"][\"values\"][\"cmt71vxm1000i356v5qzgxr5f\"]}}"
+            },
+            "code": "function cleanText(value) {\n  if (value === undefined || value === null) {\n    return '';\n  }\n\n  return String(value).trim();\n}\n\n// -----------------------------\n// Read form values\n// -----------------------------\n\nconst employeeName = cleanText(inputData.employee_name);\nconst employeeEmail = cleanText(inputData.employee_email).toLowerCase();\nconst department = cleanText(inputData.department);\nconst expenseType = cleanText(inputData.expense_type);\nconst expenseDate = cleanText(inputData.expense_date);\nconst description = cleanText(inputData.description);\nconst managerEmail = cleanText(inputData.manager_email).toLowerCase();\n\n\n// -----------------------------\n// Clean Amount\n// -----------------------------\n\nconst rawAmount = String(inputData.amount || '')\n  .replace(/[^0-9.]/g, '');\n\nconst amount = parseFloat(rawAmount) || 0;\n\n\n// -----------------------------\n// Detect missing receipt\n// -----------------------------\n\nconst receipt = cleanText(inputData.receipt);\n\nconst receiptMissing =\n  receipt === '' ||\n  receipt.toLowerCase() === 'null' ||\n  receipt.toLowerCase() === 'none' ||\n  receipt.toLowerCase() === 'undefined';\n\n\n// -----------------------------\n// Determine Risk Level\n// -----------------------------\n//\n// Low    = amount < 100\n// Medium = 100 to 500\n// High   = above 500\n//\n\nlet riskLevel;\n\nif (amount < 100) {\n  riskLevel = 'Low';\n\n} else if (amount <= 500) {\n  riskLevel = 'Medium';\n\n} else {\n  riskLevel = 'High';\n}\n\n\n// -----------------------------\n// Determine Approval Status\n// -----------------------------\n//\n// Missing receipt overrides\n// all other approval logic.\n//\n\nlet approvalStatus;\n\nif (receiptMissing) {\n\n  approvalStatus = 'Receipt Required';\n\n} else if (riskLevel === 'Low') {\n\n  approvalStatus = 'Approved';\n\n} else {\n\n  approvalStatus = 'Pending';\n}\n\n\n// -----------------------------\n// Generate Request ID\n// -----------------------------\n//\n// Example:\n// EXP-4821\n//\n\nconst randomNumber =\n  Math.floor(1000 + Math.random() * 9000);\n\nconst requestId =\n  `EXP-${randomNumber}`;\n\n\n// Submitted At\nconst submittedAt = new Date().toISOString();\n\n// -----------------------------\n// Clean Output\n// -----------------------------\n\noutput = {\n\n  request_id: requestId,\n\n  employee_name: employeeName,\n\n  employee_email: employeeEmail,\n\n  department: department,\n\n  expense_type: expenseType,\n\n  amount: amount,\n\n  expense_date: expenseDate,\n\n  description: description,\n\n  receipt: receipt,\n\n  receipt_missing: receiptMissing,\n\n  manager_email: managerEmail,\n\n  risk_level: riskLevel,\n\n  approval_status: approvalStatus,\n\n  submitted_at: submittedAt\n};"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {}
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 1,
+          "root_id": 1,
+          "action": "01929fad-d3dd-62c2-52ed-7868d5fcc691",
+          "selected_api": "CodeCLIAPI@1.0.1",
+          "title": null,
+          "authentication_id": null
+        },
+        "3": {
+          "id": 3,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "table_id": "YOUR_EXPENSE_REQUESTS_TABLE_ID",
+            "record_id": "{{=output[\"377435123\"][\"recordId\"]}}",
+            "new__data__f1": "{{=output[\"377435715\"][\"request_id\"]}}",
+            "new__data__f2": "",
+            "new__data__f3": "",
+            "new__data__f11": "{{=output[\"377435715\"][\"approval_status\"]}}",
+            "new__data__f12": "{{=output[\"377435715\"][\"risk_level\"]}}",
+            "new__data__f13": "{{=output[\"377435715\"][\"submitted_at\"]}}"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "table_id": "[Table] Expense Requests"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 2,
+          "root_id": 1,
+          "action": "update_record",
+          "selected_api": "TableCLIAPI@1.26.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "4": {
+          "id": 4,
+          "paused": true,
+          "type_of": "write",
+          "params": {},
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 3,
+          "root_id": 1,
+          "action": "branch",
+          "selected_api": "BranchingAPI",
+          "title": null,
+          "authentication_id": null
+        },
+        "5": {
+          "id": 5,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Heroine Blue",
+            "emoji": "A",
+            "path_eval_index": 0,
+            "filter_criteria": [
+              {
+                "id": 7940926666207756,
+                "group": 6436806264712805,
+                "key": "{{=output[\"377435715\"][\"approval_status\"]}}",
+                "value": "Receipt Required",
+                "match": "iexact",
+                "action": "continue"
+              }
+            ]
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "stepTitle": "Receipt Required"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 4,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "Receipt Required",
+          "authentication_id": null
+        },
+        "6": {
+          "id": 6,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Peru",
+            "emoji": "B",
+            "path_eval_index": 1,
+            "filter_criteria": [
+              {
+                "id": 114888037754644,
+                "group": 8368778861624141,
+                "key": "{{=output[\"377435715\"][\"risk_level\"]}}",
+                "value": "Low",
+                "match": "iexact",
+                "action": "continue"
+              },
+              {
+                "id": 1865168159503104,
+                "group": 8368778861624141,
+                "key": "{{=output[\"377435715\"][\"approval_status\"]}}",
+                "value": "Approved",
+                "match": "iexact",
+                "action": "continue"
+              }
+            ]
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "stepTitle": "Low Risk"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 4,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "Low Risk",
+          "authentication_id": null
+        },
+        "7": {
+          "id": 7,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Yellow Green",
+            "emoji": "C",
+            "path_eval_index": 2,
+            "filter_criteria": [
+              {
+                "id": 3275982117499540,
+                "group": 6231076091377897,
+                "key": "{{=output[\"377435715\"][\"risk_level\"]}}",
+                "value": "Medium",
+                "match": "iexact",
+                "action": "continue"
+              },
+              {
+                "id": 7168672195044010,
+                "group": 6231076091377897,
+                "key": "{{=output[\"377435715\"][\"approval_status\"]}}",
+                "value": "Pending",
+                "match": "iexact",
+                "action": "continue"
+              }
+            ]
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "stepTitle": "Medium Risk"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 4,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "Medium Risk",
+          "authentication_id": null
+        },
+        "8": {
+          "id": 8,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Dark Magenta",
+            "emoji": "D",
+            "path_eval_index": 3,
+            "filter_criteria": [
+              {
+                "id": 3604945173717516,
+                "group": 5211478285880414,
+                "key": "{{=output[\"377435715\"][\"risk_level\"]}}",
+                "value": "High",
+                "match": "iexact",
+                "action": "continue"
+              },
+              {
+                "id": 2481840252294306,
+                "group": 5211478285880414,
+                "key": "{{=output[\"377435715\"][\"approval_status\"]}}",
+                "value": "Pending",
+                "match": "iexact",
+                "action": "continue"
+              }
+            ]
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "stepTitle": "High Risk"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 4,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "High Risk",
+          "authentication_id": null
+        },
+        "9": {
+          "id": 9,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "approve_label": "Approve",
+            "reject_label": "Decline",
+            "denied_action": "continue",
+            "allow_edit": false,
+            "reviewer_type": "internal",
+            "actionOnTimeout": "end",
+            "timeout": "7",
+            "timeoutUnit": "days",
+            "sendReminder": true,
+            "message": "This is a high-risk employee expense. Please review the expense details and approve or reject the request.",
+            "contentKeys": [
+              "Request ID",
+              "Employee",
+              "Department",
+              "Expense Type",
+              "Amount",
+              "Expense Date",
+              "Description",
+              "Risk Level",
+              "Receipt"
+            ],
+            "contentToBeReviewed": {
+              "Request ID": "{{=output[\"377435715\"][\"request_id\"]}}",
+              "Employee": "{{=output[\"377435715\"][\"employee_name\"]}}",
+              "Department": "{{=output[\"377435715\"][\"department\"]}}",
+              "Expense Type": "{{=output[\"377435715\"][\"expense_type\"]}}",
+              "Amount": "{{=output[\"377435715\"][\"amount\"]}}",
+              "Expense Date": "{{=output[\"377435715\"][\"expense_date\"]}}",
+              "Description": "{{=output[\"377435715\"][\"description\"]}}",
+              "Risk Level": "{{=output[\"377435715\"][\"risk_level\"]}}",
+              "Receipt": "{{=output[\"377435715\"][\"receipt\"]}}"
+            },
+            "request_channel": "email",
+            "reviewers": [
+              "YOUR_ZAPIER_REVIEWER_ID"
+            ],
+            "email_recipients": [
+              "{{=output[\"377435715\"][\"manager_email\"]}}"
+            ],
+            "reminderTime": "1",
+            "reminderTimeUnit": "days"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "reviewers": [
+                "YOUR_REVIEWER_NAME"
+              ]
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 8,
+          "root_id": 1,
+          "action": "request_approval",
+          "selected_api": "App226439CLIAPI@1.1.2",
+          "title": null,
+          "authentication_id": null
+        },
+        "10": {
+          "id": 10,
+          "paused": true,
+          "type_of": "write",
+          "params": {},
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "replaced_step_id": "_GEN_1787601344200"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 9,
+          "root_id": 1,
+          "action": "branch",
+          "selected_api": "BranchingAPI",
+          "title": null,
+          "authentication_id": null
+        },
+        "11": {
+          "id": 11,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Dark Olive Green",
+            "emoji": "E",
+            "filter_criteria": [
+              {
+                "id": 1910465321810257,
+                "group": 7458812833109967,
+                "key": "{{=output[\"377448327\"][\"decision\"]}}",
+                "value": "approved",
+                "match": "iexact",
+                "action": "continue"
+              }
+            ],
+            "path_eval_index": 0
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "missing_field_mapping": [
+                {
+                  "stepId": "377448325",
+                  "giveKey": "decision",
+                  "stepTitle": "Request Approval in Human in the Loop",
+                  "stepNumber": 10,
+                  "app": "App226439CLIAPI@1.1.2",
+                  "hadMappingAtCopyTime": true
+                }
+              ]
+            },
+            "stepTitle": "Manager Approved"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 10,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "Manager Approved",
+          "authentication_id": null
+        },
+        "12": {
+          "id": 12,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Light Slate Gray",
+            "emoji": "F",
+            "path_eval_index": 1,
+            "filter_criteria": [
+              {
+                "id": 6697626321326709,
+                "group": 3470201683401697,
+                "key": "{{=output[\"377448327\"][\"decision\"]}}",
+                "value": "rejected",
+                "match": "iexact",
+                "action": "continue"
+              }
+            ]
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "missing_field_mapping": [
+                {
+                  "stepId": "377448325",
+                  "giveKey": "decision",
+                  "stepTitle": "Request Approval in Human in the Loop",
+                  "stepNumber": 10,
+                  "app": "App226439CLIAPI@1.1.2",
+                  "hadMappingAtCopyTime": true
+                }
+              ]
+            },
+            "stepTitle": "Manager Rejected"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 10,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "Manager Rejected",
+          "authentication_id": null
+        },
+        "13": {
+          "id": 13,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "table_id": "YOUR_EXPENSE_REQUESTS_TABLE_ID",
+            "record_id": "{{=output[\"377437055\"][\"record_id\"]}}",
+            "new__data__f11": "Rejected"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "missing_field_mapping": [
+                {
+                  "stepId": "377437055",
+                  "giveKey": "record_id",
+                  "stepTitle": "Update Record in Zapier Tables",
+                  "stepNumber": 3,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                }
+              ]
+            },
+            "parammap": {
+              "table_id": "[Table] Expense Requests"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 12,
+          "root_id": 1,
+          "action": "update_record",
+          "selected_api": "TableCLIAPI@1.26.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "14": {
+          "id": 14,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "approve_label": "Approve",
+            "reject_label": "Reject",
+            "denied_action": "continue",
+            "allow_edit": false,
+            "reviewer_type": "internal",
+            "actionOnTimeout": "end",
+            "timeout": "7",
+            "timeoutUnit": "days",
+            "sendReminder": true,
+            "message": "HIGH-RISK expense requires Finance approval. The manager has already approved this request. Please review the expense details and approve or reject the request.",
+            "contentKeys": [
+              "Request ID",
+              "Employee Name",
+              "Employee Email",
+              "Department",
+              "Expense Type",
+              "Amount",
+              "Expense Date",
+              "Description",
+              "Receipt",
+              "Manager Email",
+              "Risk Level",
+              "Approval Status",
+              "Manager Decision"
+            ],
+            "contentToBeReviewed": {
+              "Request ID": "{{=output[\"377435715\"][\"request_id\"]}}",
+              "Employee Name": "{{=output[\"377435715\"][\"employee_name\"]}}",
+              "Employee Email": "{{=output[\"377435715\"][\"employee_email\"]}}",
+              "Department": "{{=output[\"377435715\"][\"department\"]}}",
+              "Expense Type": "{{=output[\"377435715\"][\"expense_type\"]}}",
+              "Amount": "{{=output[\"377435715\"][\"amount\"]}}",
+              "Expense Date": "{{=output[\"377435715\"][\"expense_date\"]}}",
+              "Description": "{{=output[\"377435715\"][\"description\"]}}",
+              "Receipt": "{{=output[\"377435715\"][\"receipt\"]}}",
+              "Manager Email": "{{=output[\"377435715\"][\"manager_email\"]}}",
+              "Risk Level": "{{=output[\"377435715\"][\"risk_level\"]}}",
+              "Approval Status": "{{=output[\"377435715\"][\"approval_status\"]}}",
+              "Manager Decision": "{{=output[\"377448327\"][\"decision\"]}}"
+            },
+            "request_channel": "email",
+            "email_recipients": [
+              "{{=output[\"377435715\"][\"manager_email\"]}}"
+            ],
+            "reviewers": [
+              "YOUR_ZAPIER_REVIEWER_ID"
+            ],
+            "reminderTime": "1",
+            "reminderTimeUnit": "days"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "missing_field_mapping": [
+                {
+                  "stepId": "377435715",
+                  "giveKey": "request_id",
+                  "stepTitle": "Run Javascript in Code by Zapier",
+                  "stepNumber": 2,
+                  "app": "CodeCLIAPI@1.0.1",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "377435715",
+                  "giveKey": "employee_name",
+                  "stepTitle": "Run Javascript in Code by Zapier",
+                  "stepNumber": 2,
+                  "app": "CodeCLIAPI@1.0.1",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "377435715",
+                  "giveKey": "employee_email",
+                  "stepTitle": "Run Javascript in Code by Zapier",
+                  "stepNumber": 2,
+                  "app": "CodeCLIAPI@1.0.1",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "377435715",
+                  "giveKey": "department",
+                  "stepTitle": "Run Javascript in Code by Zapier",
+                  "stepNumber": 2,
+                  "app": "CodeCLIAPI@1.0.1",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "377435715",
+                  "giveKey": "expense_type",
+                  "stepTitle": "Run Javascript in Code by Zapier",
+                  "stepNumber": 2,
+                  "app": "CodeCLIAPI@1.0.1",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "377435715",
+                  "giveKey": "amount",
+                  "stepTitle": "Run Javascript in Code by Zapier",
+                  "stepNumber": 2,
+                  "app": "CodeCLIAPI@1.0.1",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "377435715",
+                  "giveKey": "expense_date",
+                  "stepTitle": "Run Javascript in Code by Zapier",
+                  "stepNumber": 2,
+                  "app": "CodeCLIAPI@1.0.1",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "377435715",
+                  "giveKey": "description",
+                  "stepTitle": "Run Javascript in Code by Zapier",
+                  "stepNumber": 2,
+                  "app": "CodeCLIAPI@1.0.1",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "377435715",
+                  "giveKey": "receipt",
+                  "stepTitle": "Run Javascript in Code by Zapier",
+                  "stepNumber": 2,
+                  "app": "CodeCLIAPI@1.0.1",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "377435715",
+                  "giveKey": "manager_email",
+                  "stepTitle": "Run Javascript in Code by Zapier",
+                  "stepNumber": 2,
+                  "app": "CodeCLIAPI@1.0.1",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "377435715",
+                  "giveKey": "risk_level",
+                  "stepTitle": "Run Javascript in Code by Zapier",
+                  "stepNumber": 2,
+                  "app": "CodeCLIAPI@1.0.1",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "377435715",
+                  "giveKey": "approval_status",
+                  "stepTitle": "Run Javascript in Code by Zapier",
+                  "stepNumber": 2,
+                  "app": "CodeCLIAPI@1.0.1",
+                  "hadMappingAtCopyTime": true
+                }
+              ],
+              "replaced_step_id": "_GEN_1787601344229"
+            },
+            "parammap": {
+              "reviewers": [
+                "YOUR_REVIEWER_NAME"
+              ]
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 11,
+          "root_id": 1,
+          "action": "request_approval",
+          "selected_api": "App226439CLIAPI@1.1.2",
+          "title": null,
+          "authentication_id": null
+        },
+        "15": {
+          "id": 15,
+          "paused": true,
+          "type_of": "write",
+          "params": {},
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 14,
+          "root_id": 1,
+          "action": "branch",
+          "selected_api": "BranchingAPI",
+          "title": null,
+          "authentication_id": null
+        },
+        "16": {
+          "id": 16,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Dark Sea Green",
+            "emoji": "I",
+            "filter_criteria": [
+              {
+                "id": 7144909893532632,
+                "group": 7355255815798203,
+                "key": "{{=output[\"377524795\"][\"decision\"]}}",
+                "value": "approved",
+                "match": "iexact",
+                "action": "continue"
+              }
+            ],
+            "path_eval_index": 0
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "stepTitle": "Finance Approved"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 15,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "Path I",
+          "authentication_id": null
+        },
+        "17": {
+          "id": 17,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Zapier Orange",
+            "emoji": "J",
+            "path_eval_index": 1,
+            "filter_criteria": [
+              {
+                "id": 14238965628441,
+                "group": 7187389249219029,
+                "key": "{{=output[\"377524795\"][\"decision\"]}}",
+                "value": "rejected",
+                "match": "iexact",
+                "action": "continue"
+              }
+            ]
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "stepTitle": "Finance Rejected"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 15,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "Path J",
+          "authentication_id": null
+        },
+        "18": {
+          "id": 18,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "table_id": "YOUR_EXPENSE_REQUESTS_TABLE_ID",
+            "record_id": "{{=output[\"377437055\"][\"record_id\"]}}",
+            "new__data__f11": "Rejected"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "missing_field_mapping": [
+                {
+                  "stepId": "377437055",
+                  "giveKey": "record_id",
+                  "stepTitle": "Update Record in Zapier Tables",
+                  "stepNumber": 3,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                }
+              ],
+              "replaced_step_id": "_GEN_1787601344258"
+            },
+            "parammap": {
+              "table_id": "[Table] Expense Requests"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 17,
+          "root_id": 1,
+          "action": "update_record",
+          "selected_api": "TableCLIAPI@1.26.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "19": {
+          "id": 19,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "table_id": "YOUR_EXPENSE_REQUESTS_TABLE_ID",
+            "record_id": "{{=output[\"377437055\"][\"record_id\"]}}",
+            "new__data__f11": "Approved"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "missing_field_mapping": [
+                {
+                  "stepId": "377437055",
+                  "giveKey": "record_id",
+                  "stepTitle": "Update Record in Zapier Tables",
+                  "stepNumber": 3,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                }
+              ],
+              "replaced_step_id": "_GEN_1787601344255"
+            },
+            "parammap": {
+              "table_id": "[Table] Expense Requests"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 16,
+          "root_id": 1,
+          "action": "update_record",
+          "selected_api": "TableCLIAPI@1.26.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "20": {
+          "id": 20,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "approve_label": "Approve",
+            "reject_label": "Reject",
+            "denied_action": "continue",
+            "allow_edit": false,
+            "reviewer_type": "internal",
+            "actionOnTimeout": "end",
+            "timeout": "7",
+            "timeoutUnit": "days",
+            "sendReminder": true,
+            "message": "A medium-risk employee expense requires your approval. Please review the expense details below and approve or reject the request.",
+            "contentKeys": [
+              "Request ID",
+              "Employee Name",
+              "Employee Email",
+              "Department",
+              "Expense Type",
+              "Amount",
+              "Expense Date",
+              "Description",
+              "Receipt",
+              "Manager Email",
+              "Risk Level",
+              "Approval Status"
+            ],
+            "contentToBeReviewed": {
+              "Request ID": "{{=output[\"377435715\"][\"request_id\"]}}",
+              "Employee Name": "{{=output[\"377435715\"][\"employee_name\"]}}",
+              "Employee Email": "{{=output[\"377435715\"][\"employee_email\"]}}",
+              "Department": "{{=output[\"377435715\"][\"department\"]}}",
+              "Expense Type": "{{=output[\"377435715\"][\"expense_type\"]}}",
+              "Amount": "{{=output[\"377435715\"][\"amount\"]}}",
+              "Expense Date": "{{=output[\"377435715\"][\"expense_date\"]}}",
+              "Description": "{{=output[\"377435715\"][\"description\"]}}",
+              "Receipt": "{{=output[\"377435715\"][\"receipt\"]}}",
+              "Manager Email": "{{=output[\"377435715\"][\"manager_email\"]}}",
+              "Risk Level": "{{=output[\"377435715\"][\"risk_level\"]}}",
+              "Approval Status": "{{=output[\"377435715\"][\"approval_status\"]}}"
+            },
+            "request_channel": "email",
+            "email_recipients": [
+              "{{=output[\"377435715\"][\"manager_email\"]}}"
+            ],
+            "reviewers": [
+              "YOUR_ZAPIER_REVIEWER_ID"
+            ],
+            "reminderTime": "1",
+            "reminderTimeUnit": "days"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "reviewers": [
+                "YOUR_REVIEWER_NAME"
+              ]
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 7,
+          "root_id": 1,
+          "action": "request_approval",
+          "selected_api": "App226439CLIAPI@1.1.2",
+          "title": null,
+          "authentication_id": null
+        },
+        "21": {
+          "id": 21,
+          "paused": true,
+          "type_of": "write",
+          "params": {},
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 20,
+          "root_id": 1,
+          "action": "branch",
+          "selected_api": "BranchingAPI",
+          "title": null,
+          "authentication_id": null
+        },
+        "22": {
+          "id": 22,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Dark Olive Green",
+            "emoji": "E",
+            "filter_criteria": [
+              {
+                "id": 8676776730766707,
+                "group": 7458812833109967,
+                "key": "{{=output[\"377448325\"][\"decision\"]}}",
+                "value": "approved",
+                "match": "iexact",
+                "action": "continue"
+              }
+            ],
+            "path_eval_index": 0
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "stepTitle": "Manager Approved"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 21,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "Manager Approved",
+          "authentication_id": null
+        },
+        "23": {
+          "id": 23,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Light Slate Gray",
+            "emoji": "F",
+            "path_eval_index": 1,
+            "filter_criteria": [
+              {
+                "id": 2125271172943480,
+                "group": 3470201683401697,
+                "key": "{{=output[\"377448325\"][\"decision\"]}}",
+                "value": "rejected",
+                "match": "iexact",
+                "action": "continue"
+              }
+            ]
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "stepTitle": "Manager Rejected"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 21,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "Manager Rejected",
+          "authentication_id": null
+        },
+        "24": {
+          "id": 24,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "table_id": "YOUR_EXPENSE_REQUESTS_TABLE_ID",
+            "record_id": "{{=output[\"377437055\"][\"record_id\"]}}",
+            "new__data__f11": "Rejected"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "table_id": "[Table] Expense Requests"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 23,
+          "root_id": 1,
+          "action": "update_record",
+          "selected_api": "TableCLIAPI@1.26.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "25": {
+          "id": 25,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "table_id": "YOUR_EXPENSE_REQUESTS_TABLE_ID",
+            "record_id": "{{=output[\"377437055\"][\"record_id\"]}}",
+            "new__data__f11": "Approved"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "table_id": "[Table] Expense Requests"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 22,
+          "root_id": 1,
+          "action": "update_record",
+          "selected_api": "TableCLIAPI@1.26.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "26": {
+          "id": 26,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "body_type": "plain",
+            "render_signature_in_html": false,
+            "signature_delimiter": true,
+            "send_to_groups": false,
+            "to": [
+              "{{=output[\"377435715\"][\"employee_email\"]}}"
+            ],
+            "subject": "Expense Approved – {{=output[\"377435715\"][\"request_id\"]}}",
+            "body": "Your expense request has been automatically approved.\r\n\r\nRequest ID: {{=output[\"377435715\"][\"request_id\"]}}\r\nExpense Type: {{=output[\"377435715\"][\"expense_type\"]}}\r\nAmount: ${{=output[\"377435715\"][\"amount\"]}}\r\nRisk Level: Low\r\nStatus: Approved"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {}
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 6,
+          "root_id": 1,
+          "action": "message",
+          "selected_api": "GoogleMailV2CLIAPI@2.14.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "27": {
+          "id": 27,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "body_type": "plain",
+            "render_signature_in_html": false,
+            "signature_delimiter": true,
+            "send_to_groups": false,
+            "to": [
+              "{{=output[\"377435715\"][\"employee_email\"]}}"
+            ],
+            "subject": "Receipt Required – Expense Request {{=output[\"377435715\"][\"request_id\"]}}",
+            "body": "Your expense request has been received, but a receipt is required before it can proceed for approval.\r\n\r\nRequest ID:{{=output[\"377435715\"][\"request_id\"]}}\nEmployee: {{=output[\"377435715\"][\"employee_name\"]}}\nExpense Type: {{=output[\"377435715\"][\"expense_type\"]}}\nAmount: ${{=output[\"377435715\"][\"amount\"]}}\nRisk Level: {{=output[\"377435715\"][\"risk_level\"]}}\nStatus: Receipt Required\r\n\r\nPlease submit the required receipt."
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {}
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 5,
+          "root_id": 1,
+          "action": "message",
+          "selected_api": "GoogleMailV2CLIAPI@2.14.0",
+          "title": null,
+          "authentication_id": null
+        }
+      }
+    }
+  ]
+}
