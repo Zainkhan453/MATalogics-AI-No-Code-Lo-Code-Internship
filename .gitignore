@@ -7,3 +7,14 @@ Day-03/GitHub/Contribution/ComfyUI/
 # OS files
 Thumbs.db
 desktop.ini
+
+# Local inspection/QA files
+tmp/
+.repo-inspect/
+
+# Day 8-11 evidence screenshots containing personal contact/test lead data
+/Day 8-11/1. INTERFACE + FORM + TABLE  LEAD INTAKE SYSTEM/Screenshots/Screenshot 2026-08-24 030217.png
+/Day 8-11/1. INTERFACE + FORM + TABLE  LEAD INTAKE SYSTEM/Screenshots/Screenshot 2026-08-24 030245.png
+/Day 8-11/1. INTERFACE + FORM + TABLE  LEAD INTAKE SYSTEM/Screenshots/Screenshot 2026-08-24 030258.png
+/Day 8-11/1. INTERFACE + FORM + TABLE  LEAD INTAKE SYSTEM/Screenshots/Screenshot 2026-08-24 030636.png
+/Day 8-11/1. INTERFACE + FORM + TABLE  LEAD INTAKE SYSTEM/Screenshots/Screenshot 2026-08-24 030646.png

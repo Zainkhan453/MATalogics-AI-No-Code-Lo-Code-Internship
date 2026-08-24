@@ -14,12 +14,15 @@ Each day is stored in its own folder containing the workflows, API collections, 
 | **Day 5** | Slack & Notion — three n8n automations: task notifications, client onboarding, and Google Form → Notion registration | [`Day-05/`](Day-05/) |
 | **Day 6** | Airtable as a no-code database + n8n — CRUD operations and five automation workflows (leads, onboarding, projects, AI-agent monitoring, internship tracker) | [`Day-06/`](Day-06/) |
 | **Day 7** | End-to-end AI Client Onboarding System — Vapi voice agent → n8n → OpenAI classification → Airtable + Notion + Slack, with priority-based alerts | [`Day-07/`](Day-07/) |
+| **Days 8–11** | Nine Zapier projects covering Interfaces, Tables, Chatbots, Kanban pipelines and autonomous agents | [`Day 8-11/`](Day%208-11/) |
 
 ---
 
 ## Project Overview
 
 This repository documents a hands-on internship in AI automation. The focus is on building real, working backends without writing a traditional server — using **n8n** for workflow orchestration, **Google Sheets** as a lightweight data store, and **Postman** for API testing and documentation.
+
+Days 8–11 extend the portfolio into **Zapier Interfaces, Tables, Paths, Chatbots, Kanban workflows and autonomous AI agents**. Progress is tracked inside the [`Day 8-11`](Day%208-11/) folder so each project can be committed as it is completed.
 
 Day 3 delivers a complete **Lead Management REST API**: four endpoints, full CRUD, validation, proper status codes, and a Postman collection that exercises every route.
 
@@ -40,7 +43,7 @@ Day 3 delivers a complete **Lead Management REST API**: four endpoints, full CRU
 ## Repository Structure
 
 ```
-AI-Automation-Internship/
+MATalogics-AI-No-Code-Lo-Code-Internship/
 │
 ├── README.md
 ├── Day-03/
@@ -70,13 +73,21 @@ AI-Automation-Internship/
 │   ├── Airtable/           # 5-table base screenshots
 │   ├── n8n/                # 6 workflow JSONs + automation-result screenshots
 │   └── README.md
-└── Day-07/
+├── Day-07/
     ├── n8n/                # AI Client Onboarding workflow JSON + execution screenshot
     ├── Vapi/               # voice-agent config + system-prompt screenshot
     ├── Airtable/           # Client Onboarding table screenshots
     ├── Notion/             # Client Projects database screenshots
     ├── Slack/              # priority-based notification screenshots
     └── README.md
+└── Day 8-11/
+    ├── Task Brief - Days 8-11.pdf
+    ├── README.md            # nine-project progress tracker
+    └── 1. INTERFACE + FORM + TABLE  LEAD INTAKE SYSTEM/
+        ├── Workflow/        # exported Zap JSON
+        ├── Screenshots/     # non-sensitive evidence
+        ├── Zapier Form Link.md
+        └── README.md
 ```
 
 ---
@@ -93,8 +104,8 @@ AI-Automation-Internship/
 ### 2. Clone the repository
 
 ```bash
-git clone https://github.com/zainkhan453/AI-Automation-Internship.git
-cd AI-Automation-Internship
+git clone https://github.com/Zainkhan453/MATalogics-AI-No-Code-Lo-Code-Internship.git
+cd MATalogics-AI-No-Code-Lo-Code-Internship
 ```
 
 ### 3. Create the Google Sheet

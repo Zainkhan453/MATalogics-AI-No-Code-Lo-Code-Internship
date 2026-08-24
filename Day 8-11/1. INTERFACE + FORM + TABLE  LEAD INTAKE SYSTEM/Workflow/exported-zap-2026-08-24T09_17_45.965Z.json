@@ -1,0 +1,193 @@
+{
+  "metadata": {
+    "version": 2
+  },
+  "zaps": [
+    {
+      "id": 1,
+      "title": "When a new Sales Lead Intake form submission is created",
+      "nodes": {
+        "1": {
+          "id": 1,
+          "paused": false,
+          "type_of": "read",
+          "params": {
+            "formId": "cmt67lsyu0007klxi0pibzx0b",
+            "pageId": "cmt67lsj5000nzqfa6zpryr48",
+            "projectId": "cmt67ls0k007xdckz59vq81yu"
+          },
+          "meta": {
+            "timezone": "America/Los_Angeles",
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "formId": "Sales Lead Intake Form",
+              "pageId": "Sales Lead Intake",
+              "projectId": "New Form Project"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": null,
+          "root_id": null,
+          "action": "new_form_submission",
+          "selected_api": "InterfacesCLIAPI@1.9.1",
+          "title": "When a new Sales Lead Intake form submission is created",
+          "authentication_id": null
+        },
+        "2": {
+          "id": 2,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "packages_enabled": false,
+            "input": {
+              "name": "{{=output[\"377370011\"][\"values\"][\"cmt67n4ku0001356vilxre7bv\"]}}",
+              "company": "{{=output[\"377370011\"][\"values\"][\"cmt67r1z30004356vbyvw0vn2\"]}}",
+              "email": "{{=output[\"377370011\"][\"values\"][\"cmt67o0hy0002356v8bnjhhbw\"]}}",
+              "phone": "{{=output[\"377370011\"][\"values\"][\"cmt67outk0003356vo7v1um6v\"]}}",
+              "budget": "{{=output[\"377370011\"][\"values\"][\"cmt67silx0006356vnzvzxqxo\"]}}",
+              "source": "{{=output[\"377370011\"][\"values\"][\"cmt67tbpi0007356vooc496cb\"]}}",
+              "urgency": "{{=output[\"377370011\"][\"values\"][\"cmt67vqfa0009356v1toyiyge\"]}}",
+              "requirement": "{{=output[\"377370011\"][\"values\"][\"cmt67v5ng0008356vpkcddjr7\"]}}",
+              "raw_id": "{{=output[\"377370011\"][\"recordId\"]}}"
+            },
+            "code": "// ==========================================\n// SALES LEAD SCORING + DATA NORMALIZATION\n// ==========================================\n\n// Helper function to safely clean text\nfunction cleanText(value) {\n  if (value === undefined || value === null) {\n    return '';\n  }\n\n  return String(value).trim();\n}\n\n// Helper function for lowercase comparison\nfunction normalizeText(value) {\n  return cleanText(value).toLowerCase();\n}\n\n\n// ==========================================\n// 1. READ INPUT DATA\n// ==========================================\n\nconst name = cleanText(inputData.name);\nconst company = cleanText(inputData.company);\nconst email = cleanText(inputData.email).toLowerCase();\nconst phone = cleanText(inputData.phone);\n\nconst source = cleanText(inputData.source);\nconst urgency = cleanText(inputData.urgency);\nconst requirement = cleanText(inputData.requirement);\nconst rawId = cleanText(inputData.raw_id);\n\n\n// ==========================================\n// 2. CLEAN BUDGET\n// ==========================================\n\n// Removes:\n// $\n// commas\n// spaces\n// currency text\n// other non-numeric characters\n\nconst rawBudget = String(inputData.budget || '')\n  .replace(/[^0-9.]/g, '');\n\nconst budget = parseFloat(rawBudget) || 0;\n\n\n// ==========================================\n// 3. LEAD SCORING\n// ==========================================\n\nlet score = 0;\n\n\n// ------------------------------------------\n// URGENCY SCORE\n// High = +30\n// Medium = +20\n// Low = +10\n// ------------------------------------------\n\nconst urgencyNormalized = normalizeText(urgency);\n\nif (urgencyNormalized.includes('high')) {\n  score += 30;\n} else if (urgencyNormalized.includes('medium')) {\n  score += 20;\n} else if (urgencyNormalized.includes('low')) {\n  score += 10;\n}\n\n\n// ------------------------------------------\n// BUDGET SCORE\n// Above $5,000 = +30\n// $1,000-$5,000 = +20\n// Below $1,000 = +10\n// ------------------------------------------\n\nif (budget > 5000) {\n  score += 30;\n\n} else if (budget >= 1000 && budget <= 5000) {\n  score += 20;\n\n} else if (budget > 0 && budget < 1000) {\n  score += 10;\n}\n\n\n// ------------------------------------------\n// LEAD SOURCE SCORE\n// Referral = +20\n// LinkedIn = +15\n// ------------------------------------------\n\nconst sourceNormalized = normalizeText(source);\n\nif (sourceNormalized.includes('referral')) {\n  score += 20;\n\n} else if (sourceNormalized.includes('linkedin')) {\n  score += 15;\n}\n\n\n// ==========================================\n// 4. DETERMINE PRIORITY\n// ==========================================\n\n// 70+ = Hot\n// 40-69 = Warm\n// Below 40 = Cold\n\nlet priority = 'Cold';\n\nif (score >= 70) {\n  priority = 'Hot';\n\n} else if (score >= 40) {\n  priority = 'Warm';\n}\n\n\n// ==========================================\n// 5. GENERATE LEAD ID\n// ==========================================\n\n// Example:\n// LEAD-2026-4591\n\nconst year = new Date().getFullYear();\n\nconst randomNumber =\n  Math.floor(1000 + Math.random() * 9000);\n\nconst leadId =\n  `LEAD-${year}-${randomNumber}`;\n\n\n// ==========================================\n// 6. OUTPUT CLEAN DATA\n// ==========================================\n\noutput = {\n\n  lead_id: leadId,\n\n  name: name,\n\n  company: company,\n\n  email: email,\n\n  phone: phone,\n\n  budget: budget,\n\n  source: source,\n\n  urgency: urgency,\n\n  requirement_details: requirement,\n\n  score: score,\n\n  priority: priority,\n\n  status: 'New',\n\n  raw_record_id: rawId\n\n};"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {},
+            "stepTitle": "Run Javascript"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 1,
+          "root_id": 1,
+          "action": "01929fad-d3dd-62c2-52ed-7868d5fcc691",
+          "selected_api": "CodeCLIAPI@1.0.1",
+          "title": null,
+          "authentication_id": null
+        },
+        "3": {
+          "id": 3,
+          "paused": true,
+          "type_of": "write",
+          "params": {},
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 2,
+          "root_id": 1,
+          "action": "branch",
+          "selected_api": "BranchingAPI",
+          "title": null,
+          "authentication_id": null
+        },
+        "4": {
+          "id": 4,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Heroine Blue",
+            "emoji": "A",
+            "filter_criteria": [
+              {
+                "id": 6102238775419592,
+                "group": 4352303738113123,
+                "key": "{{=output[\"377370127\"][\"priority\"]}}",
+                "value": "Hot",
+                "match": "iexact",
+                "action": "continue"
+              },
+              {
+                "id": 6143643208317251,
+                "group": 8944786209574878,
+                "key": "{{=output[\"377370127\"][\"urgency\"]}}",
+                "value": "High",
+                "match": "iexact",
+                "action": "continue"
+              }
+            ],
+            "path_eval_index": 0
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "stepTitle": "High Priority Lead"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 3,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "High Priority Lead",
+          "authentication_id": null
+        },
+        "5": {
+          "id": 5,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "body_type": "plain",
+            "render_signature_in_html": false,
+            "signature_delimiter": true,
+            "send_to_groups": false,
+            "to": [
+              "YOUR_SALES_TEAM_EMAIL"
+            ],
+            "subject": "Hot Lead Alert:{{=output[\"377370127\"][\"company\"]}}",
+            "body": "A high-priority lead has just been submitted!\r\n\r\nLead ID: {{=output[\"377370127\"][\"lead_id\"]}}\r\nName: {{=output[\"377370127\"][\"name\"]}}\nCompany: {{=output[\"377370127\"][\"company\"]}}\r\nEmail: {{=output[\"377370127\"][\"email\"]}}\r\nPhone: {{=output[\"377370127\"][\"phone\"]}}\r\nBudget: ${{=output[\"377370127\"][\"budget\"]}}\r\nLead Source: {{=output[\"377370127\"][\"source\"]}}\r\nUrgency: {{=output[\"377370127\"][\"urgency\"]}}\r\nLead Score: {{=output[\"377370127\"][\"score\"]}}\r\nPriority: {{=output[\"377370127\"][\"priority\"]}}\r\nStatus: {{=output[\"377370127\"][\"status\"]}}\r\n\r\nRequirement Details:\r\n{{=output[\"377370127\"][\"requirement_details\"]}}"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {}
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 4,
+          "root_id": 1,
+          "action": "message",
+          "selected_api": "GoogleMailV2CLIAPI@2.14.0",
+          "title": null,
+          "authentication_id": null
+        }
+      }
+    }
+  ]
+}
