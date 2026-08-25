@@ -10,7 +10,7 @@ The complete assignment is available in [Task Brief - Days 8-11.pdf](Task%20Brie
 |---|---------|--------|--------|
 | 1 | [Lead Intake System](1.%20INTERFACE%20%2B%20FORM%20%2B%20TABLE%20%20LEAD%20INTAKE%20SYSTEM/) | Interface + Form + Table | Completed |
 | 2 | [Employee Expense Approval](2.%20INTERFACE%20%2B%20FORM%20%2B%20TABLE%20%20EMPLOYEE%20EXPENSE%20APPROVAL/) | Interface + Form + Table | Completed |
-| 3 | AI Customer Support Bot | Chatbot | Planned |
+| 3 | [AI Customer Support Bot](3.%20AI%20CUSTOMER%20SUPPORT%20BOT/) | Chatbot | Completed |
 | 4 | AI Appointment Booking Assistant | Chatbot | Planned |
 | 5 | Customer Onboarding Pipeline | Kanban + Form Automation | Planned |
 | 6 | Recruitment Pipeline | Kanban + Form Automation | Planned |

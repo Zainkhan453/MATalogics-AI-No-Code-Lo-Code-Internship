@@ -1,0 +1,624 @@
+{
+  "metadata": {
+    "version": 2
+  },
+  "zaps": [
+    {
+      "id": 1,
+      "title": "CloudFlow - AI Support Ticket Automation",
+      "nodes": {
+        "1": {
+          "id": 1,
+          "paused": false,
+          "type_of": "read",
+          "params": {
+            "table_id": "01M0TXNJ23ADRBZ8ADF4ADXESA"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "table_id": "[Table] Support Tickets"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": null,
+          "root_id": null,
+          "action": "new_record",
+          "selected_api": "TableCLIAPI@1.26.0",
+          "title": "CloudFlow - AI Support Ticket Automation",
+          "authentication_id": null
+        },
+        "2": {
+          "id": 2,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "api_branch_name": "",
+            "authentication_id": "0",
+            "model_id": "standard/auto",
+            "isOutputArray": false,
+            "instructions": "Classify this CloudFlow customer support issue into exactly one priority.\r\n\r\nRules:\r\n\r\nCritical = The system is completely down, the whole service is unavailable, or there is a severe system-wide outage.\r\n\r\nHigh = The customer cannot access their account or cannot log in.\r\n\r\nMedium = A normal technical problem or customer question that requires support but is not urgent.\r\n\r\nLow = A general request, suggestion, feedback, or other non-urgent request.\r\n\r\nReturn ONLY one of these exact words:\r\n\r\nCritical\r\nHigh\r\nMedium\r\nLow\r\n\r\nCustomer issue:\r\n{{=output[\"377537383\"][\"new\"][\"data\"][\"f11\"]}}",
+            "outputFields": [
+              {
+                "name": "Customer Issue",
+                "description": "The specific problem or issue described by the customer that needs to be classified into a priority level.",
+                "type": "text",
+                "isRequired": true
+              },
+              {
+                "name": "Priority Level",
+                "description": "The classification of the customer support issue based on its urgency and impact.",
+                "type": "category_single",
+                "isRequired": true,
+                "options": [
+                  "Critical",
+                  "High",
+                  "Medium",
+                  "Low"
+                ]
+              }
+            ]
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "authentication_id": "0",
+              "model_id": "standard/auto"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 1,
+          "root_id": 1,
+          "action": "get_completion",
+          "selected_api": "AICLIAPI@4.0.24",
+          "title": null,
+          "authentication_id": null
+        },
+        "3": {
+          "id": 3,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "table_id": "01M0TXNJ23ADRBZ8ADF4ADXESA",
+            "record_id": "{{=output[\"377537383\"][\"record_id\"]}}",
+            "new__data__f1": "",
+            "new__data__f2": "{{=output[\"377537383\"][\"new\"][\"data\"][\"f8\"]}}",
+            "new__data__f3": "{{=output[\"377537383\"][\"new\"][\"data\"][\"f3\"]}}",
+            "new__data__f4": "{{=output[\"377537383\"][\"new\"][\"data\"][\"f11\"]}}",
+            "new__data__f5": "{{=output[\"377537384\"][\"Priority Level\"]}}",
+            "new__data__f6": "New",
+            "new__data__f7": "{{=output[\"377537383\"][\"new\"][\"created_at\"]}}"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "table_id": "[Table] Support Tickets"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 2,
+          "root_id": 1,
+          "action": "update_record",
+          "selected_api": "TableCLIAPI@1.26.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "4": {
+          "id": 4,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "packages_enabled": false,
+            "input": {
+              "record_id": "{{=output[\"377537383\"][\"record_id\"]}}"
+            },
+            "code": "return {\n  ticket_id: \"TKT-\" + inputData.record_id\n};"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {}
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 3,
+          "root_id": 1,
+          "action": "01929fad-d3dd-62c2-52ed-7868d5fcc691",
+          "selected_api": "CodeCLIAPI@1.0.1",
+          "title": null,
+          "authentication_id": null
+        },
+        "5": {
+          "id": 5,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "table_id": "01M0TXNJ23ADRBZ8ADF4ADXESA",
+            "record_id": "{{=output[\"377537383\"][\"record_id\"]}}",
+            "new__data__f1": "{{=output['377656712'][\"ticket_id\"]}}"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "table_id": "[Table] Support Tickets"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 4,
+          "root_id": 1,
+          "action": "update_record",
+          "selected_api": "TableCLIAPI@1.26.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "6": {
+          "id": 6,
+          "paused": true,
+          "type_of": "write",
+          "params": {},
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 5,
+          "root_id": 1,
+          "action": "branch",
+          "selected_api": "BranchingAPI",
+          "title": null,
+          "authentication_id": null
+        },
+        "7": {
+          "id": 7,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Heroine Blue",
+            "emoji": "A",
+            "path_eval_index": 0,
+            "filter_criteria": [
+              {
+                "id": 7333773345420460,
+                "group": 8016903237168100,
+                "key": "{{=output[\"377537384\"][\"Priority Level\"]}}",
+                "value": "Critical",
+                "match": "iexact",
+                "action": "continue"
+              }
+            ]
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "stepTitle": "Critical Path"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 6,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "Critical Path",
+          "authentication_id": null
+        },
+        "8": {
+          "id": 8,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Peru",
+            "emoji": "B",
+            "path_eval_index": 1,
+            "filter_criteria": [
+              {
+                "id": 8627583017884450,
+                "group": 4849348393684142,
+                "key": "{{=output[\"377537384\"][\"Priority Level\"]}}",
+                "value": "High",
+                "match": "iexact",
+                "action": "continue"
+              }
+            ]
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "stepTitle": "High Path"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 6,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "High Path",
+          "authentication_id": null
+        },
+        "9": {
+          "id": 9,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Yellow Green",
+            "emoji": "C",
+            "path_eval_index": 2,
+            "filter_criteria": [
+              {
+                "id": 5992677732699996,
+                "group": 3707209156311861,
+                "key": "{{=output[\"377537384\"][\"Priority Level\"]}}",
+                "value": "Medium",
+                "match": "iexact",
+                "action": "continue"
+              }
+            ]
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "stepTitle": "Medium Path"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 6,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "Medium Path",
+          "authentication_id": null
+        },
+        "10": {
+          "id": 10,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Dark Magenta",
+            "emoji": "D",
+            "path_eval_index": 3,
+            "filter_criteria": [
+              {
+                "id": 4320417091887816,
+                "group": 8133307203673402,
+                "key": "{{=output[\"377537384\"][\"Priority Level\"]}}",
+                "value": "Low",
+                "match": "iexact",
+                "action": "continue"
+              }
+            ]
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "stepTitle": "Low Path"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 6,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "Low Path",
+          "authentication_id": null
+        },
+        "11": {
+          "id": 11,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "add_app_to_channel": true,
+            "as_bot": true,
+            "add_edit_link": true,
+            "unfurl": true,
+            "link_names": true,
+            "reply_broadcast": true,
+            "channel": "C0BSKTL7M7G",
+            "text": "ℹ️ GENERAL SUPPORT REQUEST\r\n\r\nTicket ID: {{=output['377656713'][\"new\"][\"data\"][\"f1\"]}}\nCustomer: {{=output['377656713'][\"new\"][\"data\"][\"f2\"]}}\r\nEmail: {{=output['377656713'][\"new\"][\"data\"][\"f3\"]}}\r\nPriority: Critical\r\nStatus: New\r\n\r\nIssue:\r\n{{=output['377656713'][\"new\"][\"data\"][\"f4\"]}}\r\n\r\nImmediate attention is required."
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "missing_field_mapping": [
+                {
+                  "stepId": "_GEN_1787680335459",
+                  "giveKey": "new__data__f1",
+                  "stepTitle": "Update Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1787680335459",
+                  "giveKey": "new__data__f2",
+                  "stepTitle": "Update Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1787680335459",
+                  "giveKey": "new__data__f3",
+                  "stepTitle": "Update Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1787680335459",
+                  "giveKey": "new__data__f4",
+                  "stepTitle": "Update Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                }
+              ],
+              "replaced_step_id": "_GEN_1787680335472"
+            },
+            "parammap": {
+              "channel": "cloudflow-support"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 10,
+          "root_id": 1,
+          "action": "channel_message",
+          "selected_api": "SlackCLIAPI@1.40.1",
+          "title": null,
+          "authentication_id": null
+        },
+        "12": {
+          "id": 12,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "add_app_to_channel": true,
+            "as_bot": true,
+            "add_edit_link": true,
+            "unfurl": true,
+            "link_names": true,
+            "reply_broadcast": true,
+            "channel": "C0BSKTL7M7G",
+            "text": "📩 NEW SUPPORT TICKET\r\n\r\nTicket ID: {{=output['377656713'][\"new\"][\"data\"][\"f1\"]}}\nCustomer: {{=output['377656713'][\"new\"][\"data\"][\"f2\"]}}\r\nEmail: {{=output['377656713'][\"new\"][\"data\"][\"f3\"]}}\r\nPriority: Critical\r\nStatus: New\r\n\r\nIssue:\r\n{{=output['377656713'][\"new\"][\"data\"][\"f4\"]}}\r\n\r"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "missing_field_mapping": [
+                {
+                  "stepId": "_GEN_1787680335459",
+                  "giveKey": "new__data__f1",
+                  "stepTitle": "Update Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1787680335459",
+                  "giveKey": "new__data__f2",
+                  "stepTitle": "Update Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1787680335459",
+                  "giveKey": "new__data__f3",
+                  "stepTitle": "Update Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1787680335459",
+                  "giveKey": "new__data__f4",
+                  "stepTitle": "Update Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                }
+              ],
+              "replaced_step_id": "_GEN_1787680335469"
+            },
+            "parammap": {
+              "channel": "cloudflow-support"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 9,
+          "root_id": 1,
+          "action": "channel_message",
+          "selected_api": "SlackCLIAPI@1.40.1",
+          "title": null,
+          "authentication_id": null
+        },
+        "13": {
+          "id": 13,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "add_app_to_channel": true,
+            "as_bot": true,
+            "add_edit_link": true,
+            "unfurl": true,
+            "link_names": true,
+            "reply_broadcast": true,
+            "channel": "C0BSKTL7M7G",
+            "text": "⚠️ HIGH PRIORITY SUPPORT TICKET\n\nTicket ID: {{=output['377656713'][\"new\"][\"data\"][\"f1\"]}}\nCustomer: {{=output['377656713'][\"new\"][\"data\"][\"f2\"]}}\r\nEmail: {{=output['377656713'][\"new\"][\"data\"][\"f3\"]}}\r\nPriority: Critical\r\nStatus: New\r\n\r\nIssue:\r\n{{=output['377656713'][\"new\"][\"data\"][\"f4\"]}}\r\n\r"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "missing_field_mapping": [
+                {
+                  "stepId": "_GEN_1787680335459",
+                  "giveKey": "new__data__f1",
+                  "stepTitle": "Update Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1787680335459",
+                  "giveKey": "new__data__f2",
+                  "stepTitle": "Update Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1787680335459",
+                  "giveKey": "new__data__f3",
+                  "stepTitle": "Update Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1787680335459",
+                  "giveKey": "new__data__f4",
+                  "stepTitle": "Update Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                }
+              ],
+              "replaced_step_id": "_GEN_1787680335466"
+            },
+            "parammap": {
+              "channel": "cloudflow-support"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 8,
+          "root_id": 1,
+          "action": "channel_message",
+          "selected_api": "SlackCLIAPI@1.40.1",
+          "title": null,
+          "authentication_id": null
+        },
+        "14": {
+          "id": 14,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "add_app_to_channel": true,
+            "as_bot": true,
+            "add_edit_link": true,
+            "unfurl": true,
+            "link_names": true,
+            "reply_broadcast": true,
+            "channel": "C0BSKTL7M7G",
+            "text": "🚨 CRITICAL SUPPORT TICKET\r\n\r\nTicket ID: {{=output['377656713'][\"new\"][\"data\"][\"f1\"]}}\nCustomer: {{=output['377656713'][\"new\"][\"data\"][\"f2\"]}}\r\nEmail: {{=output['377656713'][\"new\"][\"data\"][\"f3\"]}}\r\nPriority: Critical\r\nStatus: New\r\n\r\nIssue:\r\n{{=output['377656713'][\"new\"][\"data\"][\"f4\"]}}\r\n\r\nImmediate attention is required."
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "channel": "cloudflow-support"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 7,
+          "root_id": 1,
+          "action": "channel_message",
+          "selected_api": "SlackCLIAPI@1.40.1",
+          "title": null,
+          "authentication_id": null
+        }
+      }
+    }
+  ]
+}
