@@ -381,7 +381,7 @@
             "link_names": true,
             "reply_broadcast": true,
             "channel": "C0BSKTL7M7G",
-            "text": "ℹ️ GENERAL SUPPORT REQUEST\r\n\r\nTicket ID: {{=output['377656713'][\"new\"][\"data\"][\"f1\"]}}\nCustomer: {{=output['377656713'][\"new\"][\"data\"][\"f2\"]}}\r\nEmail: {{=output['377656713'][\"new\"][\"data\"][\"f3\"]}}\r\nPriority: Critical\r\nStatus: New\r\n\r\nIssue:\r\n{{=output['377656713'][\"new\"][\"data\"][\"f4\"]}}\r\n\r\nImmediate attention is required."
+            "text": "ℹ️ GENERAL SUPPORT REQUEST\r\n\r\nTicket ID: {{=output['377656713'][\"new\"][\"data\"][\"f1\"]}}\nCustomer: {{=output['377656713'][\"new\"][\"data\"][\"f2\"]}}\r\nEmail: {{=output['377656713'][\"new\"][\"data\"][\"f3\"]}}\r\nPriority: Low\r\nStatus: New\r\n\r\nIssue:\r\n{{=output['377656713'][\"new\"][\"data\"][\"f4\"]}}\r\n\r\n\nThis is a non-urgent support request."
           },
           "meta": {
             "$editor": {
@@ -452,7 +452,7 @@
             "link_names": true,
             "reply_broadcast": true,
             "channel": "C0BSKTL7M7G",
-            "text": "📩 NEW SUPPORT TICKET\r\n\r\nTicket ID: {{=output['377656713'][\"new\"][\"data\"][\"f1\"]}}\nCustomer: {{=output['377656713'][\"new\"][\"data\"][\"f2\"]}}\r\nEmail: {{=output['377656713'][\"new\"][\"data\"][\"f3\"]}}\r\nPriority: Critical\r\nStatus: New\r\n\r\nIssue:\r\n{{=output['377656713'][\"new\"][\"data\"][\"f4\"]}}\r\n\r"
+            "text": "📩 NEW SUPPORT TICKET\r\n\r\nTicket ID: {{=output['377656713'][\"new\"][\"data\"][\"f1\"]}}\nCustomer: {{=output['377656713'][\"new\"][\"data\"][\"f2\"]}}\r\nEmail: {{=output['377656713'][\"new\"][\"data\"][\"f3\"]}}\r\nPriority: Medium\r\nStatus: New\r\n\r\nIssue:\r\n{{=output['377656713'][\"new\"][\"data\"][\"f4\"]}}\r\n\nPlease review this ticket during the normal support queue.\n\r"
           },
           "meta": {
             "$editor": {
@@ -523,7 +523,7 @@
             "link_names": true,
             "reply_broadcast": true,
             "channel": "C0BSKTL7M7G",
-            "text": "⚠️ HIGH PRIORITY SUPPORT TICKET\n\nTicket ID: {{=output['377656713'][\"new\"][\"data\"][\"f1\"]}}\nCustomer: {{=output['377656713'][\"new\"][\"data\"][\"f2\"]}}\r\nEmail: {{=output['377656713'][\"new\"][\"data\"][\"f3\"]}}\r\nPriority: Critical\r\nStatus: New\r\n\r\nIssue:\r\n{{=output['377656713'][\"new\"][\"data\"][\"f4\"]}}\r\n\r"
+            "text": "⚠️ HIGH PRIORITY SUPPORT TICKET\n\nTicket ID: {{=output['377656713'][\"new\"][\"data\"][\"f1\"]}}\nCustomer: {{=output['377656713'][\"new\"][\"data\"][\"f2\"]}}\r\nEmail: {{=output['377656713'][\"new\"][\"data\"][\"f3\"]}}\r\nPriority: High\r\nStatus: New\r\n\r\nIssue:\r\n{{=output['377656713'][\"new\"][\"data\"][\"f4\"]}}\r\n\nPlease review this ticket as soon as possible.\n\r"
           },
           "meta": {
             "$editor": {
