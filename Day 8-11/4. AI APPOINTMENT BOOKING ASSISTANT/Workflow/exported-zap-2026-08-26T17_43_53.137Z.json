@@ -1,0 +1,531 @@
+{
+  "metadata": {
+    "version": 2
+  },
+  "zaps": [
+    {
+      "id": 1,
+      "title": "Check Availability & Book button is clicked",
+      "nodes": {
+        "1": {
+          "id": 1,
+          "paused": false,
+          "type_of": "read",
+          "params": {
+            "chatbotId": "cmt94wu1l058c0n74aobkernx",
+            "actionId": "cmt952002000o35700nfi03od"
+          },
+          "meta": {
+            "timezone": "America/Los_Angeles",
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "chatbotId": "SmartCare Clinic Appointment Assistant",
+              "actionId": "Check Availability & Book"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": null,
+          "root_id": null,
+          "action": "button_click",
+          "selected_api": "ChatbotsCLIAPI@1.3.2",
+          "title": "Check Availability & Book button is clicked",
+          "authentication_id": null
+        },
+        "2": {
+          "id": 2,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "transform": "date.formatting",
+            "to_timezone": "Asia/Karachi",
+            "from_timezone": "UTC",
+            "inputs": "{{zap_meta_timestamp}}",
+            "to_format": "YYYY-MM-DD"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "transform": "Format"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 1,
+          "root_id": 1,
+          "action": "datetime_line_item",
+          "selected_api": "ZapierFormatterCLIAPI@1.0.8",
+          "title": null,
+          "authentication_id": null
+        },
+        "3": {
+          "id": 3,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "api_branch_name": "",
+            "authentication_id": "0",
+            "model_id": "standard/auto",
+            "isOutputArray": false,
+            "instructions": "You are the appointment-data extraction system for SmartCare Clinic.\r\n\r\nYour task is to extract the patient's final confirmed appointment information from the chatbot conversation.\r\n\r\nCURRENT CLINIC DATE:\r\n{{=output['377685137'][\"output\"]}}\r\n\r\nCLINIC TIMEZONE:\r\nAsia/Karachi\r\n\r\nCONVERSATION TRANSCRIPT:\r\n{{=output[\"377678886\"][\"values\"][\"transcript\"]}}\r\nAVAILABLE DOCTORS:\r\n\r\n- Dr. Ahmed - General Physician\r\n- Dr. Sara - Dermatologist\r\n- Dr. Ali - Cardiologist\r\n\r\nGENERAL EXTRACTION RULES:\r\n\r\n1. Extract only the final information confirmed by the patient.\r\n2. If the patient changed any information, use the latest confirmed value.\r\n3. Do not invent, assume, or generate missing information.\r\n4. Ignore unconfirmed values that were later corrected.\r\n5. Return values only through the configured output fields.\r\n\r\nPATIENT NAME: {{=output[\"377678886\"][\"user\"][\"name\"]}}\r\n\r\n6. Extract the patient's final confirmed full name.\r\n7. Preserve the name accurately.\r\n\r\nEMAIL:{{=output[\"377678886\"][\"user\"][\"email\"]}}\r\n\r\n8. Extract the patient's final confirmed email address.\r\n9. Return the email address in lowercase.\r\n10. Preserve valid characters such as periods, underscores, hyphens, and plus signs.\r\n11. If the patient corrected the email, use the latest confirmed version.\r\n12. Do not invent, complete, or silently correct an email address.\r\n13. If no confirmed email exists, return an empty value and set booking_complete to No.\r\n\r\nPHONE:\r\n\r\n14. Extract the patient's final confirmed phone number.\r\n15. Preserve the country code when provided.\r\n16. Do not invent missing digits.\r\n\r\nDOCTOR:\r\n\r\n17. Normalize the selected doctor to exactly one of these values:\r\n\r\n- Dr. Ahmed - General Physician\r\n- Dr. Sara - Dermatologist\r\n- Dr. Ali - Cardiologist\r\n\r\n18. Apply the following specialist mapping:\r\n\r\n- General Physician → Dr. Ahmed - General Physician\r\n- Dermatologist → Dr. Sara - Dermatologist\r\n- Cardiologist → Dr. Ali - Cardiologist\r\n\r\n19. If the patient requested a doctor or specialist outside this list, return an empty doctor value and set booking_complete to No.\r\n\r\nDATE:\r\n\r\n20. Treat CURRENT CLINIC DATE as today.\r\n21. Do not use your own internal current date.\r\n22. Convert relative expressions such as today, tomorrow, next Monday, and next Friday using CURRENT CLINIC DATE.\r\n23. If the patient says today, return CURRENT CLINIC_DATE.\r\n24. If the patient says tomorrow, add exactly one calendar day to CURRENT_CLINIC_DATE.\r\n25. Return preferred_date in YYYY-MM-DD format.\r\n26. Do not return words such as today or tomorrow in preferred_date.\r\n\r\nTIME:\r\n\r\n27. Convert the final confirmed preferred time into 24-hour HH:mm format.\r\n\r\nExamples:\r\n\r\n- 4 PM → 16:00\r\n- 4:30 PM → 16:30\r\n- 9 AM → 09:00\r\n- 12 PM → 12:00\r\n- 12 AM → 00:00\r\n\r\nREASON:\r\n\r\n28. Extract the patient's final confirmed reason for the appointment.\r\n29. Keep the reason concise and faithful to the patient's statement.\r\n30. Do not add medical diagnoses, treatments, or advice.\r\n\r\nPATIENT CONFIRMATION:\r\n\r\n31. Determine whether the patient confirmed the complete Appointment Request Summary.\r\n32. Treat clear responses such as Yes, Correct, Confirm, or The details are correct as confirmation.\r\n33. Do not treat an earlier unrelated use of the word Yes as final confirmation.\r\n34. If the patient corrected any information after confirming, require confirmation of the corrected summary.\r\n\r\nBOOKING COMPLETENESS:\r\n\r\n35. Set booking_complete to Yes only if all of the following are present and valid:\r\n\r\n- Patient name\r\n- Confirmed email address\r\n- Phone number\r\n- Valid doctor\r\n- Preferred date\r\n- Preferred time\r\n- Reason for appointment\r\n- Patient confirmation of the final complete summary\r\n\r\n36. If any required information is missing, invalid, or unconfirmed, set booking_complete to No.\r\n37. Return booking_complete as exactly Yes or No.\r\n38. Do not claim that the appointment is available, booked, or confirmed.",
+            "outputFields": [
+              {
+                "name": "patient",
+                "description": "",
+                "type": "text",
+                "isRequired": true
+              },
+              {
+                "name": "phone",
+                "description": "",
+                "type": "text",
+                "isRequired": true
+              },
+              {
+                "name": "doctor",
+                "description": "",
+                "type": "text",
+                "isRequired": true
+              },
+              {
+                "name": "preferred_date",
+                "description": "",
+                "type": "text",
+                "isRequired": true
+              },
+              {
+                "name": "preferred_time",
+                "description": "",
+                "type": "text",
+                "isRequired": true
+              },
+              {
+                "name": "reason",
+                "description": "",
+                "type": "text",
+                "isRequired": true
+              },
+              {
+                "name": "booking_complete",
+                "description": "",
+                "type": "text",
+                "isRequired": true
+              },
+              {
+                "name": "slot_key",
+                "description": "Doctor, date, and time combined as Doctor|YYYY-MM-DD|HH:mm",
+                "type": "text",
+                "isRequired": true
+              },
+              {
+                "name": "email",
+                "description": "Final confirmed patient email address in lowercase",
+                "type": "text",
+                "isRequired": true
+              }
+            ]
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "authentication_id": "0",
+              "model_id": "standard/auto"
+            },
+            "stepTitle": "Extract Appointment Details"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 2,
+          "root_id": 1,
+          "action": "get_completion",
+          "selected_api": "AICLIAPI@4.0.24",
+          "title": null,
+          "authentication_id": null
+        },
+        "4": {
+          "id": 4,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "packages_enabled": false,
+            "input": {
+              "doctor": "{{=output[\"377679158\"][\"doctor\"]}}",
+              "date": "{{=output[\"377679158\"][\"preferred_date\"]}}",
+              "time": "{{=output[\"377679158\"][\"preferred_time\"]}}"
+            },
+            "code": "const doctor = inputData.doctor?.trim();\nconst date = inputData.date?.trim();\nconst time = inputData.time?.trim();\n\nif (!doctor || !date || !time) {\n  throw new Error(\"Doctor, date and time are required.\");\n}\n\nif (!/^\\d{4}-\\d{2}-\\d{2}$/.test(date)) {\n  throw new Error(\"Date must use YYYY-MM-DD format.\");\n}\n\nconst timeMatch = time.match(/^([01]\\d|2[0-3]):([0-5]\\d)$/);\n\nif (!timeMatch) {\n  throw new Error(\"Time must use HH:mm format.\");\n}\n\nconst hour = Number(timeMatch[1]);\nconst minute = Number(timeMatch[2]);\n\nconst formatTime = totalMinutes => {\n  const normalized = ((totalMinutes % 1440) + 1440) % 1440;\n  const hours = String(Math.floor(normalized / 60)).padStart(2, \"0\");\n  const minutes = String(normalized % 60).padStart(2, \"0\");\n  return `${hours}:${minutes}`;\n};\n\nconst requestedMinutes = hour * 60 + minute;\nconst earlierTime = formatTime(requestedMinutes - 60);\nconst laterTime = formatTime(requestedMinutes + 60);\n\nconst randomCode = Math.random()\n  .toString(36)\n  .slice(2, 8)\n  .toUpperCase();\n\nreturn {\n  appointment_id: `APT-${date.replace(/-/g, \"\")}-${randomCode}`,\n  requested_time: time,\n  requested_slot_key: `${doctor}|${date}|${time}`,\n  earlier_time: earlierTime,\n  later_time: laterTime\n};"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {},
+            "stepTitle": "Generate Appointment ID and Slot Details"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 3,
+          "root_id": 1,
+          "action": "01929fad-d3dd-62c2-52ed-7868d5fcc691",
+          "selected_api": "CodeCLIAPI@1.0.1",
+          "title": "Generate Appointment ID and Slot Details",
+          "authentication_id": null
+        },
+        "5": {
+          "id": 5,
+          "paused": true,
+          "type_of": "search",
+          "params": {
+            "_zap_search_success_on_miss": true,
+            "_zap_search_multiple_results": "first",
+            "table_id": "01M0X9ZX5011ME19TYNSGRFJG8",
+            "filter_count": "4",
+            "use_stored_order": false,
+            "field_data_key": "data__f4",
+            "operator": "exact",
+            "lookup_value": "{{=output[\"377679158\"][\"doctor\"]}}",
+            "field_data_key_2": "data__f5",
+            "operator_2": "exact",
+            "lookup_value_2": "{{=output[\"377679158\"][\"preferred_date\"]}}",
+            "field_data_key_3": "data__f6",
+            "operator_3": "exact",
+            "lookup_value_3": "{{=output[\"377679158\"][\"preferred_time\"]}}",
+            "field_data_key_4": "data__f8",
+            "operator_4": "exact",
+            "lookup_value_4": "Booked"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "table_id": "[Table] Appointments",
+              "field_data_key": "Doctor",
+              "field_data_key_2": "Date",
+              "field_data_key_3": "Time",
+              "field_data_key_4": "Status"
+            },
+            "stepTitle": "Check Requested Slot Availability"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 4,
+          "root_id": 1,
+          "action": "find_record",
+          "selected_api": "TableCLIAPI@1.26.0",
+          "title": "Check Requested Slot Availability",
+          "authentication_id": null
+        },
+        "6": {
+          "id": 6,
+          "paused": true,
+          "type_of": "write",
+          "params": {},
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 5,
+          "root_id": 1,
+          "action": "branch",
+          "selected_api": "BranchingAPI",
+          "title": null,
+          "authentication_id": null
+        },
+        "7": {
+          "id": 7,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Heroine Blue",
+            "emoji": "A",
+            "filter_criteria": [
+              {
+                "id": 8124771321768115,
+                "group": 3665461143224190,
+                "key": "{{=output[\"377785690\"][\"_zap_search_was_found_status\"]}}",
+                "value": "True",
+                "match": "iexact",
+                "action": "continue"
+              }
+            ],
+            "path_eval_index": 0
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "stepTitle": "Slot Unavailable"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 6,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "Slot Unavailable",
+          "authentication_id": null
+        },
+        "8": {
+          "id": 8,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Peru",
+            "emoji": "B",
+            "path_eval_index": 1,
+            "filter_criteria": [
+              {
+                "id": 3797849054387587,
+                "group": 575644044757138,
+                "key": "{{=output[\"377785690\"][\"_zap_search_was_found_status\"]}}",
+                "value": "False",
+                "match": "iexact",
+                "action": "continue"
+              }
+            ]
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "stepTitle": "Slot Available"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 6,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "Slot Available",
+          "authentication_id": null
+        },
+        "9": {
+          "id": 9,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "table_id": "01M0X9ZX5011ME19TYNSGRFJG8",
+            "new__data__f1": "{{=output['377785689'][\"appointment_id\"]}}",
+            "new__data__f2": "{{=output['377679158'][\"patient\"]}}",
+            "new__data__f3": "{{=output['377679158'][\"phone\"]}}",
+            "new__data__f4": "{{=output['377679158'][\"doctor\"]}}",
+            "new__data__f5": "{{=output['377679158'][\"preferred_date\"]}}",
+            "new__data__f6": "{{=output[\"377785689\"][\"requested_time\"]}}",
+            "new__data__f7": "{{=output['377679158'][\"reason\"]}}",
+            "new__data__f8": "Booked",
+            "new__data__f9": "{{=output['377785689'][\"requested_slot_key\"]}}",
+            "new__data__f10": "{{=output[\"377679158\"][\"email\"]}}"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "missing_field_mapping": [
+                {
+                  "stepId": "377785689",
+                  "giveKey": "appointment_id",
+                  "stepTitle": "Generate Appointment ID and Slot Details",
+                  "stepNumber": 4,
+                  "app": "CodeCLIAPI@1.0.1",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "377679158",
+                  "giveKey": "patient",
+                  "stepTitle": "Extract Appointment Details",
+                  "stepNumber": 3,
+                  "app": "AICLIAPI@4.0.24",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "377679158",
+                  "giveKey": "phone",
+                  "stepTitle": "Extract Appointment Details",
+                  "stepNumber": 3,
+                  "app": "AICLIAPI@4.0.24",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "377679158",
+                  "giveKey": "doctor",
+                  "stepTitle": "Extract Appointment Details",
+                  "stepNumber": 3,
+                  "app": "AICLIAPI@4.0.24",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "377679158",
+                  "giveKey": "preferred_date",
+                  "stepTitle": "Extract Appointment Details",
+                  "stepNumber": 3,
+                  "app": "AICLIAPI@4.0.24",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "377679158",
+                  "giveKey": "preferred_time",
+                  "stepTitle": "Extract Appointment Details",
+                  "stepNumber": 3,
+                  "app": "AICLIAPI@4.0.24",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "377679158",
+                  "giveKey": "reason",
+                  "stepTitle": "Extract Appointment Details",
+                  "stepNumber": 3,
+                  "app": "AICLIAPI@4.0.24",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "377785689",
+                  "giveKey": "requested_slot_key",
+                  "stepTitle": "Generate Appointment ID and Slot Details",
+                  "stepNumber": 4,
+                  "app": "CodeCLIAPI@1.0.1",
+                  "hadMappingAtCopyTime": true
+                }
+              ],
+              "replaced_step_id": "_GEN_1787753153625"
+            },
+            "parammap": {
+              "table_id": "[Table] Appointments"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 8,
+          "root_id": 1,
+          "action": "create_record",
+          "selected_api": "TableCLIAPI@1.26.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "10": {
+          "id": 10,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "body_type": "plain",
+            "render_signature_in_html": false,
+            "signature_delimiter": true,
+            "send_to_groups": false,
+            "to": [
+              "{{=output[\"377679158\"][\"email\"]}}"
+            ],
+            "subject": "Your SmartCare Clinic appointment is confirmed",
+            "body": "Hello {{=output[\"377679158\"][\"patient\"]}},\r\n\r\nYour appointment has been successfully booked.\r\n\r\nAppointment ID: \r\nDoctor: {{=output[\"377679158\"][\"doctor\"]}}\r\nDate: {{=output[\"377679158\"][\"preferred_date\"]}}\nTime: {{=output[\"377679158\"][\"preferred_time\"]}}\r\nReason: {{=output[\"377679158\"][\"reason\"]}}\r\nStatus: Booked\r\n\r\nRegards,\r\nSmartCare Clinic"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {}
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 9,
+          "root_id": 1,
+          "action": "message",
+          "selected_api": "GoogleMailV2CLIAPI@2.14.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "11": {
+          "id": 11,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "body_type": "plain",
+            "render_signature_in_html": false,
+            "signature_delimiter": true,
+            "send_to_groups": false,
+            "to": [
+              "{{=output[\"377679158\"][\"email\"]}}"
+            ],
+            "subject": "Your requested appointment is unavailable",
+            "body": "Hello {{=output[\"377679158\"][\"patient\"]}}\r\n\r\nUnfortunately, your requested appointment with {{=output[\"377679158\"][\"doctor\"]}} on {{=output[\"377679158\"][\"preferred_date\"]}} at {{=output[\"377679158\"][\"preferred_time\"]}} is unavailable.\r\n\r\nNo appointment has been booked.\r\n\r\nPlease return to the SmartCare Clinic chatbot and submit your preferred alternative time.\r\n\r\nRegards,\r\nSmartCare Clinic"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {}
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 7,
+          "root_id": 1,
+          "action": "message",
+          "selected_api": "GoogleMailV2CLIAPI@2.14.0",
+          "title": null,
+          "authentication_id": null
+        }
+      }
+    }
+  ]
+}
