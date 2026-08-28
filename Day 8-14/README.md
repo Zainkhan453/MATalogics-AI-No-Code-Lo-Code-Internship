@@ -1,8 +1,8 @@
-# Zapier Projects - Days 8-11
+# Zapier Projects - Days 8-14
 
-This folder tracks the nine Zapier projects assigned for internship Days 8-11. Each project will be added as it is completed, with its exported workflow, implementation notes and safe evidence screenshots.
+This folder tracks the nine Zapier projects assigned for internship Days 8-14. Each project will be added as it is completed, with its exported workflow, implementation notes and safe evidence screenshots.
 
-The complete assignment is available in [Task Brief - Days 8-11.pdf](Task%20Brief%20-%20Days%208-11.pdf).
+The complete assignment is available in [Task Brief - Days 8-14.pdf](Task%20Brief%20-%20Days%208-14.pdf).
 
 ## Progress
 
@@ -33,8 +33,8 @@ From the repository root:
 
 ```bash
 git pull --rebase origin main
-git add "Day 8-11"
-git commit -m "Days 8-11: complete Task 3 - AI Customer Support Bot"
+git add "Day 8-14"
+git commit -m "Days 8-14: complete Task 3 - AI Customer Support Bot"
 git push origin main
 ```
 

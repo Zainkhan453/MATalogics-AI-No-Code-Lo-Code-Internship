@@ -14,7 +14,7 @@ Each day is stored in its own folder containing the workflows, API collections, 
 | **Day 5** | Slack & Notion — three n8n automations: task notifications, client onboarding, and Google Form → Notion registration | [`Day-05/`](Day-05/) |
 | **Day 6** | Airtable as a no-code database + n8n — CRUD operations and five automation workflows (leads, onboarding, projects, AI-agent monitoring, internship tracker) | [`Day-06/`](Day-06/) |
 | **Day 7** | End-to-end AI Client Onboarding System — Vapi voice agent → n8n → OpenAI classification → Airtable + Notion + Slack, with priority-based alerts | [`Day-07/`](Day-07/) |
-| **Days 8–11** | Nine Zapier projects covering Interfaces, Tables, Chatbots, Kanban pipelines and autonomous agents | [`Day 8-11/`](Day%208-11/) |
+| **Days 8–14** | Nine Zapier projects covering Interfaces, Tables, Chatbots, Kanban pipelines and autonomous agents | [`Day 8-14/`](Day%208-14/) |
 
 ---
 
@@ -22,7 +22,7 @@ Each day is stored in its own folder containing the workflows, API collections, 
 
 This repository documents a hands-on internship in AI automation. The focus is on building real, working backends without writing a traditional server — using **n8n** for workflow orchestration, **Google Sheets** as a lightweight data store, and **Postman** for API testing and documentation.
 
-Days 8–11 extend the portfolio into **Zapier Interfaces, Tables, Paths, Chatbots, Kanban workflows and autonomous AI agents**. Progress is tracked inside the [`Day 8-11`](Day%208-11/) folder so each project can be committed as it is completed.
+Days 8–14 extend the portfolio into **Zapier Interfaces, Tables, Paths, Chatbots, Kanban workflows and autonomous AI agents**. Progress is tracked inside the [`Day 8-14`](Day%208-14/) folder so each project can be committed as it is completed.
 
 Day 3 delivers a complete **Lead Management REST API**: four endpoints, full CRUD, validation, proper status codes, and a Postman collection that exercises every route.
 
@@ -80,8 +80,8 @@ MATalogics-AI-No-Code-Lo-Code-Internship/
     ├── Notion/             # Client Projects database screenshots
     ├── Slack/              # priority-based notification screenshots
     └── README.md
-└── Day 8-11/
-    ├── Task Brief - Days 8-11.pdf
+└── Day 8-14/
+    ├── Task Brief - Days 8-14.pdf
     ├── README.md            # nine-project progress tracker
     ├── 1. INTERFACE + FORM + TABLE  LEAD INTAKE SYSTEM/
         ├── Workflow/        # exported Zap JSON
