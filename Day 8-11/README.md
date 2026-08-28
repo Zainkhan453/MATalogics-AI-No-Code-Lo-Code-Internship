@@ -12,8 +12,8 @@ The complete assignment is available in [Task Brief - Days 8-11.pdf](Task%20Brie
 | 2 | [Employee Expense Approval](2.%20INTERFACE%20%2B%20FORM%20%2B%20TABLE%20%20EMPLOYEE%20EXPENSE%20APPROVAL/) | Interface + Form + Table | Completed |
 | 3 | [AI Customer Support Bot](3.%20AI%20CUSTOMER%20SUPPORT%20BOT/) | Chatbot | Completed |
 | 4 | [AI Appointment Booking Assistant](4.%20AI%20APPOINTMENT%20BOOKING%20ASSISTANT/) | Chatbot | Completed |
-| 5 | Customer Onboarding Pipeline | Kanban + Form Automation | Planned |
-| 6 | Recruitment Pipeline | Kanban + Form Automation | Planned |
+| 5 | [Customer Onboarding Pipeline](5.%20CUSTOMER%20ONBOARDING%20PIPELINE/) | Kanban + Form Automation | Completed |
+| 6 | [Recruitment Pipeline](6.%20RECRUITMENT%20PIPELINE/) | Kanban + Form Automation | Completed |
 | 7 | AI Customer Support Resolution Agent | Autonomous Agent | Planned |
 | 8 | Instagram Content Agent | Autonomous Agent | Planned |
 | 9 | AI Operations Manager | Autonomous Agent | Planned |
