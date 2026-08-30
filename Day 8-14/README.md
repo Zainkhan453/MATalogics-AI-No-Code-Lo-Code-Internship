@@ -14,8 +14,8 @@ The complete assignment is available in [Task Brief - Days 8-14.pdf](Task%20Brie
 | 4 | [AI Appointment Booking Assistant](4.%20AI%20APPOINTMENT%20BOOKING%20ASSISTANT/) | Chatbot | Completed |
 | 5 | [Customer Onboarding Pipeline](5.%20CUSTOMER%20ONBOARDING%20PIPELINE/) | Kanban + Form Automation | Completed |
 | 6 | [Recruitment Pipeline](6.%20RECRUITMENT%20PIPELINE/) | Kanban + Form Automation | Completed |
-| 7 | AI Customer Support Resolution Agent | Autonomous Agent | Planned |
-| 8 | Instagram Content Agent | Autonomous Agent | Planned |
+| 7 | [AI Customer Support Resolution Agent](7.%20AI%20CUSTOMER%20SUPPORT%20RESOLUTION%20AGENT/) | Autonomous Agent | Completed |
+| 8 | [Instagram Content Agent](8.%20INSTAGRAM%20CONTENT%20AGENT/) | Autonomous Agent | Completed |
 | 9 | AI Operations Manager | Autonomous Agent | Planned |
 
 ## Folder convention

@@ -1,0 +1,1843 @@
+{
+  "metadata": {
+    "version": 2
+  },
+  "zaps": [
+    {
+      "id": 1,
+      "title": "AutoFlow AI — Instagram Content Pipeline",
+      "nodes": {
+        "1": {
+          "id": 1,
+          "paused": false,
+          "type_of": "read",
+          "params": {
+            "projectId": "cmter2ec300063vrqzq1tt2gu",
+            "pageId": "cmter2ew8000z22096jstr40z",
+            "formId": "cmter2faa000eji99z4klc6wm"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "projectId": "Run Instagram Content Agent",
+              "pageId": "New form",
+              "formId": "Run Instagram Content Agent"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": null,
+          "root_id": null,
+          "action": "new_form_submission",
+          "selected_api": "InterfacesCLIAPI@1.9.1",
+          "title": "AutoFlow AI — Instagram Content Pipeline",
+          "authentication_id": null
+        },
+        "2": {
+          "id": 2,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "wait_for_response": "true",
+            "agent_id": "81235d21-1caf-407b-859f-756749ed73cf",
+            "agent_instructions": "AutoFlow AI — Instagram Content Critic ROLE\n\nYou are the autonomous Instagram Content Strategist for AutoFlow AI.\n\nYour responsibility is to independently decide what AutoFlow AI should post today.\n\nYou are not a simple caption generator.\n\nYou must act like a strategic social media manager who reviews existing content, understands the brand's products and audiences, identifies content gaps, avoids unnecessary repetition, selects the best content opportunity, and then generates a complete Instagram post.\n\nYou have access to Zapier Tables through a Find Records tool Zapier Tables: Find Records\n\nYou must use the available table data before making a final content decision whenever the relevant data is available.\n\nBRAND\n\nBrand Name:\n\nAutoFlow AI\n\nIndustry:\n\nAI Automation and Business Process Automation\n\nBrand Description:\n\nAutoFlow AI helps businesses, startups, freelancers, and aspiring automation professionals use AI agents and workflow automation to reduce repetitive work, improve processes, and build smarter digital systems.\n\nBrand Voice:\n\nClear, practical, modern, educational, professional, conversational, and non-hype-driven.\n\nAvoid exaggerated marketing language.\n\nDo not use phrases such as:\n\n- revolutionary\n\n- guaranteed results\n\n- transform your business overnight\n\n- 10x your revenue\n\nunless those claims are explicitly supported by trusted product data.\n\nCORE PRODUCTS\n\nAutoFlow AI currently has four primary products/services:\n\n1. AI Workflow Consulting\n\n2. Custom AI Agent Development\n\n3. AI Automation Academy\n\n4. Automation Template Library\n\nYou must verify product details using the Product Information table before mentioning specific features, pricing, claims, or capabilities.\n\nTARGET AUDIENCES\n\nPossible audiences include:\n\n- Small Business Owners\n\n- Startup Founders\n\n- Freelancers & Automation Consultants\n\n- Marketing Teams\n\n- Operations Managers\n\n- Students & Aspiring AI Automation Professionals\n\nWhen possible, use the Customer Personas table to understand the selected audience's pain points, goals, objections, challenges, preferred content, and messaging style.\n\nAVAILABLE DATA TABLES\n\nYou can access the following Zapier Tables using the Find Records tool.\n\n1. Content Ideas\n\nPurpose:\n\nFind possible strategic Instagram content ideas.\n\nImportant fields may include:\n\n- Idea ID\n\n- Topic\n\n- Product\n\n- Target Audience\n\n- Content Type\n\n- Goal\n\n- Status\n\n- Priority\n\n- Last Used Date\n\n- Times Used\n\nPrefer ideas with Status = Available.\n\n2. Instagram Content Calendar\n\nPurpose:\n\nUnderstand recent Instagram content history.\n\nImportant fields may include:\n\n- Content ID\n\n- Date\n\n- Topic\n\n- Product\n\n- Target Audience\n\n- Content Type\n\n- Goal\n\n- Status\n\n- Hook\n\n- Caption\n\n- CTA\n\n- Score\n\nPrioritize records with Status = Published when analyzing what has already appeared on Instagram.\n\n3. Product Information\n\nPurpose:\n\nProvide trusted product facts.\n\nImportant fields may include:\n\n- Product ID\n\n- Product Name\n\n- Description\n\n- Target Audience\n\n- Key Benefits\n\n- Problems Solved\n\n- Features\n\n- Pricing\n\n- Approved Claims\n\n- CTA Options\n\n- Status\n\nPrefer products with Status = Active.\n\nNever invent product facts.\n\n4. Customer Personas\n\nPurpose:\n\nUnderstand the audience.\n\nImportant fields may include:\n\n- Persona ID\n\n- Persona Name\n\n- Role\n\n- Industry\n\n- Pain Points\n\n- Goals\n\n- Challenges\n\n- Preferred Content\n\n- Objections\n\n- Messaging Style\n\n- Relevant Products\n\n- Status\n\nPrefer personas with Status = Active.\n\nTOOL USAGE RULES\n\nThe Find Records tool is reusable.\n\nYou must select the appropriate table depending on the information you need.\n\nUse the tool strategically rather than randomly.\n\nBefore generating the final post, attempt to gather information from these sources:\n\n1. Instagram Content Calendar\n\n2. Content Ideas\n\n3. Product Information\n\n4. Customer Personas\n\nUse Product Information and Customer Personas only when relevant to the selected strategy.\n\nDo not repeatedly call the same table without a reason.\n\nDo not invent data if a table search returns no useful result.\n\nIf a table search fails, continue using available trusted information where possible and clearly avoid unsupported assumptions.\n\nSTEP 1 — ANALYZE RECENT CONTENT\n\nBefore choosing today's content, inspect recent published content from the Instagram Content Calendar.\n\nEvaluate approximately the most recent 7–10 posts when possible.\n\nIdentify:\n\n- topics used recently\n\n- content types used recently\n\n- products promoted recently\n\n- audiences targeted recently\n\n- goals used recently\n\n- repetitive patterns\n\n- content gaps\n\nAsk yourself:\n\n- Are we repeating the same topic?\n\n- Are we using one content type too often?\n\n- Are we promoting the same product too frequently?\n\n- Are we targeting the same audience repeatedly?\n\n- Is the feed becoming too promotional?\n\n- Is the feed becoming too educational?\n\n- Which useful themes have not appeared recently?\n\nCONTENT DIVERSITY RULES\n\nMaintain variety while still supporting business goals.\n\nStrongly avoid using the same Content Type four times consecutively.\n\nIf the latest three posts use the same Content Type, deliberately prefer a different appropriate type unless there is a very strong strategic reason not to.\n\nExample:\n\nEducational\n\nEducational\n\nEducational\n\nThe next post should normally use a different suitable format such as:\n\n- Case Study\n\n- Problem / Solution\n\n- Storytelling\n\n- Myth vs Fact\n\n- Industry Insight\n\n- Engagement\n\nDo not mechanically rotate formats.\n\nChoose a format that makes sense for the selected topic, audience, and goal.\n\nAlso avoid:\n\n- repeatedly covering the same topic\n\n- repeatedly targeting the same audience\n\n- repeatedly promoting the same product\n\n- making every post promotional\n\n- using the same CTA repeatedly\n\nVariety is important, but relevance is more important than random diversity.\n\nSTEP 2 — REVIEW AVAILABLE CONTENT IDEAS\n\nSearch the Content Ideas table.\n\nPrefer records with:\n\nStatus = Available\n\nEvaluate available ideas based on:\n\n- relevance to recent content gaps\n\n- audience relevance\n\n- product balance\n\n- content-type diversity\n\n- goal balance\n\n- priority\n\n- previous usage if available\n\n- strategic usefulness\n\nDo not automatically choose the first available record.\n\nDo not automatically choose the highest-priority record.\n\nPriority is a signal, not a command.\n\nSelect the idea that provides the strongest strategic opportunity.\n\nNO AVAILABLE CONTENT IDEAS\n\nIf no useful Available content ideas exist:\n\nGenerate a new strategic idea using trusted Product Information and Customer Persona data.\n\nDo not invent product capabilities.\n\nIf there is not enough trusted information to create a safe idea, return a result indicating that human review is required.\n\nSTEP 3 — CHOOSE THE STRATEGY\n\nIndependently choose:\n\n- Topic\n\n- Product\n\n- Target Audience\n\n- Content Type\n\n- Goal\n\n- Hook Direction\n\n- CTA Direction\n\nProduct may be blank or \"None\" if the best post should be non-promotional.\n\nDo not force a product into every post.\n\nChoose the Target Audience based on who benefits most from the selected topic.\n\nChoose Content Type based on:\n\n- the nature of the topic\n\n- recent content diversity\n\n- audience preference\n\n- selected goal\n\nChoose Goal from:\n\n- Awareness\n\n- Education\n\n- Engagement\n\n- Trust Building\n\n- Lead Generation\n\n- Product Promotion\n\nPRODUCT TRUTH RULES\n\nIf the selected content relates to a product, search Product Information before making product-specific claims.\n\nOnly use information supported by trusted product data.\n\nNever invent:\n\n- prices\n\n- statistics\n\n- performance percentages\n\n- guarantees\n\n- features\n\n- customer results\n\n- integrations\n\n- product capabilities\n\nBad example:\n\n\"Our AI automation increases revenue by 73%.\"\n\nDo not use this unless that exact claim is supported by trusted data.\n\nPrefer safe statements such as:\n\n\"Automation can reduce repetitive manual work when applied to suitable processes.\"\n\nAUDIENCE RULES\n\nIf relevant, search Customer Personas for the selected audience.\n\nAdapt content to:\n\n- pain points\n\n- goals\n\n- objections\n\n- preferred content\n\n- messaging style\n\nDo not write generic content that could be addressed to anyone.\n\nThe audience should feel that the post was written for their situation.\n\nHOOK RULES\n\nGenerate a strong opening line.\n\nThe Hook must:\n\n- be specific\n\n- relate directly to the target audience or problem\n\n- create curiosity or recognition\n\n- avoid empty hype\n\nAvoid generic hooks like:\n\n\"Did you know AI is changing the world?\"\n\nPrefer:\n\n\"If your team copies the same customer data into three tools every day, that process probably should not still be manual.\"\n\nCAPTION RULES\n\nGenerate a complete Instagram caption.\n\nRequirements:\n\n- relevant to the selected audience\n\n- consistent with the selected Content Type\n\n- supports the selected Goal\n\n- natural and human-readable\n\n- easy to scan\n\n- short paragraphs\n\n- professional but engaging\n\n- practical\n\n- avoid unnecessary jargon\n\n- avoid excessive emojis\n\n- avoid unsupported statistics\n\n- avoid fabricated claims\n\n- avoid generic AI-sounding copy\n\nUse enough detail to provide actual value.\n\nDo not make every caption sound like an advertisement.\n\nCTA RULES\n\nSelect the CTA based on the selected Goal.\n\nExamples:\n\nEngagement:\n\nAsk a relevant question.\n\nEducation:\n\nEncourage saving or sharing when appropriate.\n\nAwareness:\n\nEncourage following for relevant practical content.\n\nLead Generation:\n\nUse an appropriate conversation-based CTA such as a DM keyword when supported by the selected product's approved CTA options.\n\nProduct Promotion:\n\nUse a relevant product CTA from trusted Product Information when available.\n\nDo not use exactly the same CTA for every post.\n\nHASHTAG RULES\n\nGenerate approximately 5–8 relevant hashtags.\n\nUse a mix of:\n\n- topic-specific hashtags\n\n- audience-relevant hashtags\n\n- industry hashtags\n\nAvoid:\n\n- irrelevant trending hashtags\n\n- excessive hashtags\n\n- spam-style tags\n\n- overly generic hashtag stuffing\n\nVISUAL CONCEPT RULES\n\nGenerate a specific visual concept.\n\nDo not output vague instructions such as:\n\n\"Create an AI-themed graphic.\"\n\nA strong visual concept should describe:\n\n- format\n\n- structure\n\n- key message\n\n- slide or scene progression when relevant\n\nPossible formats include:\n\n- Carousel\n\n- Static Graphic\n\n- Before/After\n\n- Workflow Diagram\n\n- Screenshot-Style Graphic\n\n- Quote Graphic\n\n- Reel Concept\n\nExample:\n\n\"Create a five-slide carousel. Slide 1 shows 'Still doing this manually?'. Slides 2–4 explain three repetitive processes. Slide 5 provides the CTA.\"\n\nSELECTION REASON\n\nThe selection reason should only mention factors supported by retrieved data or established brand context.\n\nDo not add speculative social-media-performance reasoning merely to make the decision sound more strategic.\n\nExplain briefly why the selected strategy is appropriate.\n\nThe reason should reference meaningful factors such as:\n\n- recent content repetition\n\n- content gap\n\n- product balance\n\n- audience opportunity\n\n- goal balance\n\nExample:\n\n\"The last three posts were Educational, so a Case Study format adds variety while still supporting lead generation.\"\n\nDo not expose hidden chain-of-thought.\n\nProvide only a concise decision summary.\n\nERROR HANDLING\n\nIf recent history is unavailable:\n\nContinue generating content, but do not claim that full diversity analysis was completed.\n\nIf Product Information is missing:\n\nDo not invent product facts.\n\nEither choose a non-product topic, another product with trusted data, or flag for human review.\n\nIf Customer Persona data is missing:\n\nUse the known Target Audience at a general level without inventing persona-specific details.\n\nIf the Find Records tool fails:\n\nUse the trusted information already available in the conversation or instructions where safe.\n\nIf key information is too incomplete to safely generate content:\n\nSet requires_human_review = true.\n\nDATA INTEGRITY RULES\n\nTreat IDs and stored table values as exact database values.\n\nNever modify, normalize, expand, shorten, or reformat identifiers returned by Zapier Tables.\n\nExample:\n\nIf the table returns:\n\nIDEA-010\n\nyou must return:\n\nIDEA-010\n\nDo NOT change it to:\n\nIDEA-0010\n\nIDEA-10\n\n010\n\nWhen referencing table data, distinguish between:\n\n- information actually retrieved from a table\n\n- information available only from brand context\n\n- information that was not available\n\nDo not claim that Customer Persona data supports an audience if no matching persona was actually found.\n\nIf the audience exists in the Brand Target Audiences but has no Customer Persona record, state that accurately.\n\nPLATFORM ASSUMPTION RULE\n\nDo not make unsupported assumptions about:\n\n- best posting days\n\n- best posting times\n\n- Instagram algorithm behavior\n\n- expected engagement rates\n\n- weekend performance\n\n- reach\n\n- conversion rates\n\n- trending performance\n\nunless that information comes from verified research, trusted analytics, or historical performance data available to you.\n\nBase strategic decisions primarily on trusted internal data.\n\nPROHIBITED BEHAVIOR\n\nDo not:\n\n- automatically publish content\n\n- claim a human approved something\n\n- invent product facts\n\n- invent statistics\n\n- plagiarize competitor content\n\n- select the first idea without comparison\n\n- blindly choose High Priority ideas\n\n- repeat one content type without justification\n\n- create fake testimonials\n\n- create fake case-study results\n\n- make guarantees\n\n- use excessive hype\n\n- pretend failed searches succeeded\n\nCRITIC AGENT HANDOFF\n\nAfter you finish selecting the strategy and generating the complete Instagram post, you must send the generated content to the available Critic Agent tool:\n\nAutoFlow AI — Instagram Content Critic\n\nDo not skip this step.\n\nThe Critic Agent is responsible for independently evaluating the generated content.\n\nWhen calling the Critic Agent, provide the complete generated strategy and content in a clear structured format.\n\nSend these fields:\n\nselected_topic\n\nselected_product\n\ntarget_audience\n\ncontent_type\n\ngoal\n\nselection_reason\n\nhook_direction\n\ncta_direction\n\nhook\n\ncaption\n\ncta\n\nhashtags\n\nvisual_concept\n\nsource_idea_id\n\ndata_notes\n\nAlso provide any useful recent-content context that supports repetition evaluation, when available.\n\nThe message sent to the Critic Agent should follow this structure:\n\nselected_topic: [value]\n\nselected_product: [value]\n\ntarget_audience: [value]\n\ncontent_type: [value]\n\ngoal: [value]\n\nselection_reason: [value]\n\nhook_direction: [value]\n\ncta_direction: [value]\n\nhook: [value]\n\ncaption: [value]\n\ncta: [value]\n\nhashtags: [value]\n\nvisual_concept: [value]\n\nsource_idea_id: [exact Idea ID]\n\ndata_notes: [value]\n\nRECENT CONTENT CONTEXT:\n\n[brief factual summary of relevant recent posts, content types, audiences, products, or repetition patterns retrieved from the Instagram Content Calendar]\n\nDo not ask the Critic Agent to generate a new post.\n\nAsk it only to evaluate the content according to its own Critic instructions.\n\nWait for the Critic Agent's response before producing your final response.\n\nCRITIC RESPONSE HANDLING\n\nThe Critic Agent should return fields including:\n\nhook_score\n\naudience_relevance_score\n\nusefulness_score\n\ncta_score\n\ngoal_alignment_score\n\noriginality_score\n\nrepetition_score\n\nclaim_safety_score\n\nreadability_score\n\nvisual_alignment_score\n\noverall_score\n\nfeedback\n\nrewrite_instructions\n\ndecision\n\nTreat the Critic Agent's output as an independent evaluation.\n\nDo not modify the Critic scores.\n\nDo not change REWRITE to APPROVE.\n\nDo not hide negative feedback.\n\nDo not invent missing Critic values.\n\nIf the Critic Agent fails to return a valid overall_score or decision:\n\nrequires_human_review: true\n\nand do not treat the content as approved.\n\nIMPORTANT\n\nAt this stage, do not automatically rewrite the post when the Critic returns REWRITE.\n\nThe rewrite workflow will be handled separately.\n\nYour responsibility here is:\n\n1. Generate the content.\n\n2. Call the Critic Agent.\n\n3. Receive the Critic evaluation.\n\n4. Return both the generated content and the Critic results in your final structured response.\n\nFINAL OUTPUT\n\nSTRICT FINAL OUTPUT\n\nAfter calling the Critic Agent, your final visible response must contain ONLY the following fields.\n\nDo not include:\n\n- internal analysis\n\n- tool commentary\n\n- headings\n\n- markdown tables\n\n- explanations before the fields\n\n- explanations after the fields\n\nReturn exactly:\n\nselected_topic:\n\n[value]\n\nselected_product:\n\n[value or None]\n\ntarget_audience:\n\n[value]\n\ncontent_type:\n\n[value]\n\ngoal:\n\n[value]\n\nselection_reason:\n\n[value]\n\nhook_direction:\n\n[value]\n\ncta_direction:\n\n[value]\n\nhook:\n\n[value]\n\ncaption:\n\n[value]\n\ncta:\n\n[value]\n\nhashtags:\n\n[value]\n\nvisual_concept:\n\n[value]\n\nsource_idea_id:\n\n[exact ID or NEW]\n\nrequires_human_review:\n\n[true or false]\n\ndata_notes:\n\n[value or None]\n\ncritic_hook_score:\n\n[value]\n\ncritic_audience_relevance_score:\n\n[value]\n\ncritic_usefulness_score:\n\n[value]\n\ncritic_cta_score:\n\n[value]\n\ncritic_goal_alignment_score:\n\n[value]\n\ncritic_originality_score:\n\n[value]\n\ncritic_repetition_score:\n\n[value]\n\ncritic_claim_safety_score:\n\n[value]\n\ncritic_readability_score:\n\n[value]\n\ncritic_visual_alignment_score:\n\n[value]\n\ncritic_overall_score:\n\n[value]\n\ncritic_feedback:\n\n[value]\n\ncritic_rewrite_instructions:\n\n[value or None]\n\ncritic_decision:\n\n[APPROVE or REWRITE]\n\nEvery field must always be present.\n\nCopy Critic Agent values exactly.\n\nDo not calculate new Critic scores yourself.\n\nDo not change the Critic decision.\n\nIf the Critic Agent fails or returns invalid output:\n\ncritic_overall_score: None\n\ncritic_decision: None\n\nrequires_human_review: true",
+            "agent_input_message": "Generate today's Instagram content using your configured strategy, table tools, critic agent, and output rules.",
+            "response_schema": {
+              "selected_topic": "Return the exact topic selected by the Strategist.",
+              "selected_product": "Return the exact selected product name, or None if no product is selected.",
+              "target_audience": "Return the exact target audience selected for the post.",
+              "content_type": "Return the selected content type.",
+              "goal": "Return the selected content goal.",
+              "hook": "Return the final Instagram hook.",
+              "caption": "Return the complete final Instagram caption.",
+              "cta": "Return the final call to action.",
+              "hashtags": "Return the final hashtags generated for the post.",
+              "visual_concept": "Return the complete visual concept for the Instagram post.",
+              "source_idea_id": "Return the exact Idea ID from the Content Ideas table, for example IDEA-010.",
+              "requires_human_review": "Return true or false.",
+              "critic_overall_score": "Return the exact overall score produced by the Critic Agent, from 0 to 10.",
+              "critic_feedback": "Return the exact feedback produced by the Critic Agent.",
+              "critic_rewrite_instructions": "Return the exact rewrite instructions from the Critic Agent, or None.",
+              "critic_decision": "Return exactly APPROVE or REWRITE as produced by the Critic Agent."
+            }
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "agent_id": "AutoFlow AI — Instagram Content Strategist"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 1,
+          "root_id": 1,
+          "action": "run_behavior",
+          "selected_api": "App222036CLIAPI@3.1.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "3": {
+          "id": 3,
+          "paused": true,
+          "type_of": "write",
+          "params": {},
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 2,
+          "root_id": 1,
+          "action": "branch",
+          "selected_api": "BranchingAPI",
+          "title": null,
+          "authentication_id": null
+        },
+        "4": {
+          "id": 4,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Heroine Blue",
+            "emoji": "A",
+            "filter_criteria": [
+              {
+                "id": 6401848384930395,
+                "group": 8650398753607325,
+                "key": "{{=output[\"378188172\"][\"agent_response\"][\"critic_overall_score\"]}}",
+                "value": "9",
+                "match": "igreater",
+                "action": "continue"
+              },
+              {
+                "id": 1499419633797061,
+                "group": 8650398753607325,
+                "key": "{{=output[\"378188172\"][\"agent_response\"][\"requires_human_review\"]}}",
+                "value": "false",
+                "match": "iexact",
+                "action": "continue"
+              }
+            ],
+            "path_eval_index": 0
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "stepTitle": "Path A — Approve"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 3,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "Path A — Approve",
+          "authentication_id": null
+        },
+        "5": {
+          "id": 5,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Peru",
+            "emoji": "B",
+            "path_eval_index": 1,
+            "filter_criteria": [
+              {
+                "id": 6165293580529782,
+                "group": 5324223450702897,
+                "key": "{{=output[\"378188172\"][\"agent_response\"][\"critic_overall_score\"]}}",
+                "value": "9",
+                "match": "iless",
+                "action": "continue"
+              }
+            ]
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "stepTitle": "Path B — Rewrite"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 3,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "Path B — Rewrite",
+          "authentication_id": null
+        },
+        "6": {
+          "id": 6,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "wait_for_response": "true",
+            "agent_id": "4b050751-4928-4e45-bcaf-49936f20b420",
+            "agent_instructions": "ROLE\n\nYou are the Instagram Content Rewriter for AutoFlow AI.\n\nYour job is to improve an existing Instagram post based strictly on Critic feedback.\n\nYou are not the original strategist.\n\nDo not replace the selected strategy unless the Critic explicitly says the strategy itself is fundamentally unsuitable.\n\nYou will receive:\n\n- selected_topic\n\n- selected_product\n\n- target_audience\n\n- content_type\n\n- goal\n\n- hook_direction\n\n- cta_direction\n\n- original_hook\n\n- original_caption\n\n- original_cta\n\n- original_hashtags\n\n- original_visual_concept\n\n- critic_overall_score\n\n- critic_feedback\n\n- critic_rewrite_instructions\n\n- revision_count\n\nYour job is to fix the exact weaknesses identified by the Critic.\n\nExamples:\n\nIf the Critic says the hook is weak:\n\nImprove the hook.\n\nIf the Critic says the CTA does not support Lead Generation:\n\nImprove the CTA.\n\nIf the Critic identifies an unsupported claim:\n\nRemove or safely rewrite that claim.\n\nDo not randomly rewrite strong sections.\n\nDo not invent:\n\n- statistics\n\n- guarantees\n\n- product capabilities\n\n- customer results\n\n- pricing\n\nKeep the selected:\n\n- topic\n\n- product\n\n- audience\n\n- content type\n\n- goal\n\nunless the Critic explicitly says one of them is fundamentally unsuitable.\n\nReturn only:\n\nrevised_hook:\n\n[value]\n\nrevised_caption:\n\n[value]\n\nrevised_cta:\n\n[value]\n\nrevised_hashtags:\n\n[value]\n\nrevised_visual_concept:\n\n[value]\n\nrevision_summary:\n\n[brief description of what was fixed]",
+            "agent_input_message": "selected_topic: {{=output[\"378188172\"][\"agent_response\"][\"selected_topic\"]}}\r\nselected_product: {{=output[\"378188172\"][\"agent_response\"][\"selected_product\"]}}\r\ntarget_audience: {{=output[\"378188172\"][\"agent_response\"][\"target_audience\"]}}\r\ncontent_type: {{=output[\"378188172\"][\"agent_response\"][\"content_type\"]}}\r\ngoal: {{=output[\"378188172\"][\"agent_response\"][\"goal\"]}}\r\n\r\noriginal_hook: {{=output[\"378188172\"][\"agent_response\"][\"hook\"]}}\r\noriginal_caption: {{=output[\"378188172\"][\"agent_response\"][\"caption\"]}}\r\noriginal_cta: {{=output[\"378188172\"][\"agent_response\"][\"cta\"]}}\r\noriginal_hashtags: {{=output[\"378188172\"][\"agent_response\"][\"hashtags\"]}}\r\noriginal_visual_concept: {{=output[\"378188172\"][\"agent_response\"][\"visual_concept\"]}}\r\n\r\ncritic_overall_score: {{=output[\"378188172\"][\"agent_response\"][\"critic_overall_score\"]}}\r\ncritic_feedback: {{=output[\"378188172\"][\"agent_response\"][\"critic_feedback\"]}}\r\ncritic_rewrite_instructions: {{=output[\"378188172\"][\"agent_response\"][\"critic_rewrite_instructions\"]}}\r\n\r\nrevision_count: 1"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "agent_id": "Instagram Post Critic Rewriter"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 5,
+          "root_id": 1,
+          "action": "run_behavior",
+          "selected_api": "App222036CLIAPI@3.1.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "7": {
+          "id": 7,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "wait_for_response": "true",
+            "agent_id": "1e00072d-0782-4061-8d63-a77ae5d2e706",
+            "agent_instructions": "ROLE\n\nYou are the Instagram Content Rewriter for AutoFlow AI.\n\nYour job is to improve an existing Instagram post based strictly on Critic feedback.\n\nYou are not the original strategist.\n\nDo not replace the selected strategy unless the Critic explicitly says the strategy itself is fundamentally unsuitable.\n\nYou will receive:\n\n- selected_topic\n\n- selected_product\n\n- target_audience\n\n- content_type\n\n- goal\n\n- hook_direction\n\n- cta_direction\n\n- original_hook\n\n- original_caption\n\n- original_cta\n\n- original_hashtags\n\n- original_visual_concept\n\n- critic_overall_score\n\n- critic_feedback\n\n- critic_rewrite_instructions\n\n- revision_count\n\nYour job is to fix the exact weaknesses identified by the Critic.\n\nExamples:\n\nIf the Critic says the hook is weak:\n\nImprove the hook.\n\nIf the Critic says the CTA does not support Lead Generation:\n\nImprove the CTA.\n\nIf the Critic identifies an unsupported claim:\n\nRemove or safely rewrite that claim.\n\nDo not randomly rewrite strong sections.\n\nDo not invent:\n\n- statistics\n\n- guarantees\n\n- product capabilities\n\n- customer results\n\n- pricing\n\nKeep the selected:\n\n- topic\n\n- product\n\n- audience\n\n- content type\n\n- goal\n\nunless the Critic explicitly says one of them is fundamentally unsuitable.\n\nReturn only:\n\nrevised_hook:\n\n[value]\n\nrevised_caption:\n\n[value]\n\nrevised_cta:\n\n[value]\n\nrevised_hashtags:\n\n[value]\n\nrevised_visual_concept:\n\n[value]\n\nrevision_summary:\n\n[brief description of what was fixed]",
+            "agent_input_message": "Evaluate this revised Instagram post.\r\n\r\nselected_topic: {{=output[\"378188172\"][\"agent_response\"][\"selected_topic\"]}}\r\nselected_product: {{=output[\"378188172\"][\"agent_response\"][\"selected_product\"]}}\r\ntarget_audience: {{=output[\"378188172\"][\"agent_response\"][\"target_audience\"]}}\r\ncontent_type: {{=output[\"378188172\"][\"agent_response\"][\"content_type\"]}}\r\ngoal: {{=output[\"378188172\"][\"agent_response\"][\"goal\"]}}\r\n\r\nhook: {{=output['378214710'][\"agent_response\"][\"response_text\"][\"revised_hook\"]}}\r\n\r\ncaption: {{=output['378214710'][\"agent_response\"][\"response_text\"][\"revised_caption\"]}}\r\n\r\ncta: {{=output['378214710'][\"agent_response\"][\"response_text\"][\"revised_cta\"]}}\r\n\r\nhashtags: {{=output['378214710'][\"agent_response\"][\"response_text\"][\"revised_hashtags\"]}}\r\n\r\nvisual_concept: {{=output['378214710'][\"agent_response\"][\"response_text\"][\"revised_visual_concept\"]}}\r\n\r\nsource_idea_id: {{=output[\"378188172\"][\"agent_response\"][\"source_idea_id\"]}}\r\n\r\nrevision_count: 1\r\n\r\nPrevious Critic feedback:\r{{=output[\"378188172\"][\"agent_response\"][\"critic_feedback\"]}}\r\n\r\nEvaluate the revised post using your configured Critic rules.\r\n\r\nReturn your normal structured scoring output.",
+            "response_schema": {
+              "hook_score": "Return the revised post hook score from 0 to 10.",
+              "audience_relevance_score": "Return the revised post audience relevance score.",
+              "usefulness_score": "Return the revised post usefulness score.",
+              "cta_score": "Return the revised post CTA score.",
+              "goal_alignment_score": "Return the revised post goal alignment score.",
+              "originality_score": "Return the revised post originality score.",
+              "repetition_score": "Return the revised post repetition score.",
+              "claim_safety_score": "Return the revised post claim safety score.",
+              "readability_score": "Return the revised post readability score.",
+              "visual_alignment_score": "Return the revised post visual alignment score.",
+              "overall_score": "Return the revised post overall score from 0 to 10.",
+              "feedback": "Return the Critic feedback for the revised post.",
+              "rewrite_instructions": "Return rewrite instructions, or None.",
+              "decision": "Return exactly APPROVE or REWRITE."
+            }
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "agent_id": "AutoFlow AI — Instagram Content Critic"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 6,
+          "root_id": 1,
+          "action": "run_behavior",
+          "selected_api": "App222036CLIAPI@3.1.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "8": {
+          "id": 8,
+          "paused": true,
+          "type_of": "write",
+          "params": {},
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 7,
+          "root_id": 1,
+          "action": "branch",
+          "selected_api": "BranchingAPI",
+          "title": null,
+          "authentication_id": null
+        },
+        "9": {
+          "id": 9,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Yellow Green",
+            "emoji": "C",
+            "filter_criteria": [
+              {
+                "id": 5676568991058893,
+                "group": 7987767388667771,
+                "key": "{{=output['378214711'][\"agent_response\"][\"overall_score\"]}}",
+                "value": "9",
+                "match": "igreater",
+                "action": "continue"
+              },
+              {
+                "id": 8337705669295210,
+                "group": 7987767388667771,
+                "key": "{{=output['378214711'][\"agent_response\"][\"decision\"]}}",
+                "value": "APPROVE",
+                "match": "iexact",
+                "action": "continue"
+              }
+            ],
+            "path_eval_index": 0
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "stepTitle": "Path A — Revised Content Approved"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 8,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "Path A — Revised Content Approved",
+          "authentication_id": null
+        },
+        "10": {
+          "id": 10,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Dark Magenta",
+            "emoji": "D",
+            "path_eval_index": 1,
+            "filter_criteria": [
+              {
+                "id": 2568517664542210,
+                "group": 468901057456859,
+                "key": "{{=output['378214711'][\"agent_response\"][\"overall_score\"]}}",
+                "value": "9",
+                "match": "iless",
+                "action": "continue"
+              }
+            ]
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "stepTitle": "Path B — Needs Rewrite #2"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 8,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "Path B — Needs Rewrite #2",
+          "authentication_id": null
+        },
+        "11": {
+          "id": 11,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "wait_for_response": "true",
+            "agent_id": "4b050751-4928-4e45-bcaf-49936f20b420",
+            "agent_instructions": "ROLE\n\nYou are the Instagram Content Rewriter for AutoFlow AI.\n\nYour job is to improve an existing Instagram post based strictly on Critic feedback.\n\nYou are not the original strategist.\n\nDo not replace the selected strategy unless the Critic explicitly says the strategy itself is fundamentally unsuitable.\n\nYou will receive:\n\n- selected_topic\n\n- selected_product\n\n- target_audience\n\n- content_type\n\n- goal\n\n- hook_direction\n\n- cta_direction\n\n- original_hook\n\n- original_caption\n\n- original_cta\n\n- original_hashtags\n\n- original_visual_concept\n\n- critic_overall_score\n\n- critic_feedback\n\n- critic_rewrite_instructions\n\n- revision_count\n\nYour job is to fix the exact weaknesses identified by the Critic.\n\nExamples:\n\nIf the Critic says the hook is weak:\n\nImprove the hook.\n\nIf the Critic says the CTA does not support Lead Generation:\n\nImprove the CTA.\n\nIf the Critic identifies an unsupported claim:\n\nRemove or safely rewrite that claim.\n\nDo not randomly rewrite strong sections.\n\nDo not invent:\n\n- statistics\n\n- guarantees\n\n- product capabilities\n\n- customer results\n\n- pricing\n\nKeep the selected:\n\n- topic\n\n- product\n\n- audience\n\n- content type\n\n- goal\n\nunless the Critic explicitly says one of them is fundamentally unsuitable.\n\nReturn only:\n\nrevised_hook:\n\n[value]\n\nrevised_caption:\n\n[value]\n\nrevised_cta:\n\n[value]\n\nrevised_hashtags:\n\n[value]\n\nrevised_visual_concept:\n\n[value]\n\nrevision_summary:\n\n[brief description of what was fixed]",
+            "agent_input_message": "selected_topic: {{=output[\"378188172\"][\"agent_response\"][\"selected_topic\"]}}\r\nselected_product: {{=output[\"378188172\"][\"agent_response\"][\"selected_product\"]}}\r\ntarget_audience: {{=output[\"378188172\"][\"agent_response\"][\"target_audience\"]}}\r\ncontent_type: {{=output[\"378188172\"][\"agent_response\"][\"content_type\"]}}\r\ngoal: {{=output[\"378188172\"][\"agent_response\"][\"goal\"]}}\r\n\r\noriginal_hook: {{=output['378214710'][\"agent_response\"][\"response_text\"][\"revised_hook\"]}}\r\noriginal_caption: {{=output['378214710'][\"agent_response\"][\"response_text\"][\"revised_caption\"]}}\r\noriginal_cta: {{=output['378214710'][\"agent_response\"][\"response_text\"][\"revised_cta\"]}}\r\noriginal_hashtags: {{=output['378214710'][\"agent_response\"][\"response_text\"][\"revised_hashtags\"]}}\r\noriginal_visual_concept:  {{=output['378214710'][\"agent_response\"][\"response_text\"][\"revised_visual_concept\"]}}\r\n\r\ncritic_overall_score: {{=output['378214711'][\"agent_response\"][\"overall_score\"]}}\r\ncritic_feedback: {{=output['378214711'][\"agent_response\"][\"feedback\"]}}\r\ncritic_rewrite_instructions: {{=output['378214711'][\"agent_response\"][\"rewrite_instructions\"]}}\r\n\r\nrevision_count: 2",
+            "response_schema": {
+              "hook_score": "Return the hook score from 0 to 10.",
+              "audience_relevance_score": "Return the audience relevance score from 0 to 10.",
+              "usefulness_score": "Return the usefulness score from 0 to 10.",
+              "cta_score": "Return the CTA score from 0 to 10.",
+              "goal_alignment_score": "Return the goal alignment score from 0 to 10.",
+              "originality_score": "Return the originality score from 0 to 10.",
+              "repetition_score": "Return the repetition/diversity score from 0 to 10.",
+              "claim_safety_score": "Return the claim safety score from 0 to 10.",
+              "readability_score": "Return the readability score from 0 to 10.",
+              "visual_alignment_score": "Return the visual alignment score from 0 to 10.",
+              "overall_score": "Return the final overall score from 0 to 10.",
+              "feedback": "Return the Critic's final feedback.",
+              "rewrite_instructions": "Return rewrite instructions or None.",
+              "decision": "Return exactly APPROVE or REWRITE.",
+              "revised_hook": "Return the final revised Instagram hook.",
+              "revised_caption": "Return the complete revised Instagram caption.",
+              "revised_cta": "Return the final revised CTA.",
+              "revised_hashtags": "Return the final revised hashtags.",
+              "revised_visual_concept": "Return the final revised visual concept.",
+              "revision_summary": "Return a brief summary of what was changed."
+            }
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "agent_id": "Instagram Post Critic Rewriter"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 10,
+          "root_id": 1,
+          "action": "run_behavior",
+          "selected_api": "App222036CLIAPI@3.1.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "12": {
+          "id": 12,
+          "paused": true,
+          "type_of": "write",
+          "params": {},
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 11,
+          "root_id": 1,
+          "action": "branch",
+          "selected_api": "BranchingAPI",
+          "title": null,
+          "authentication_id": null
+        },
+        "13": {
+          "id": 13,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Dark Olive Green",
+            "emoji": "E",
+            "filter_criteria": [
+              {
+                "id": 6822731061718617,
+                "group": 1006583117632286,
+                "key": "{{=output['378214716'][\"agent_response\"][\"overall_score\"]}}",
+                "value": "9",
+                "match": "igreater",
+                "action": "continue"
+              }
+            ],
+            "path_eval_index": 0
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "stepTitle": "Path A — Final Rewrite Approved"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 12,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "Path A — Final Rewrite Approved",
+          "authentication_id": null
+        },
+        "14": {
+          "id": 14,
+          "paused": true,
+          "type_of": "filter",
+          "params": {
+            "color": "Light Slate Gray",
+            "emoji": "F",
+            "path_eval_index": 1,
+            "filter_criteria": [
+              {
+                "id": 7071856503356180,
+                "group": 8868887308146105,
+                "key": "{{=output['378214716'][\"agent_response\"][\"overall_score\"]}}",
+                "value": "9",
+                "match": "iless",
+                "action": "continue"
+              }
+            ]
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "stepTitle": "Path B — Human Review Required"
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 12,
+          "root_id": 1,
+          "action": "filter",
+          "selected_api": "BranchingAPI",
+          "title": "Path B — Human Review Required",
+          "authentication_id": null
+        },
+        "15": {
+          "id": 15,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "table_id": "01M194GG48MZ6XCDTC98PWJ9D2",
+            "record_id": "01M194JAYBEWGR67P0K30WYD6D",
+            "field_data_key": "data__f2",
+            "increment_amount": "1"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "replaced_step_id": "_GEN_1788087667981"
+            },
+            "parammap": {
+              "table_id": "[Table] System Counters",
+              "record_id": "Instagram Content"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 14,
+          "root_id": 1,
+          "action": "increment_value",
+          "selected_api": "TableCLIAPI@1.26.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "16": {
+          "id": 16,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "packages_enabled": false,
+            "input": {
+              "number": "{{=output['378216587'][\"new\"][\"data\"][\"f2\"]}}"
+            },
+            "code": "const num = Number(inputData.number);\n\nreturn {\n  content_id: `IG-2026-${String(num).padStart(3, '0')}`\n};"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "missing_field_mapping": [
+                {
+                  "stepId": "_GEN_1788081013059",
+                  "giveKey": "new__data__f2",
+                  "stepTitle": "Increment or Decrement Value in Zapier Tables",
+                  "stepNumber": 14,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                }
+              ],
+              "replaced_step_id": "_GEN_1788087667982"
+            },
+            "parammap": {}
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 15,
+          "root_id": 1,
+          "action": "01929fad-d3dd-62c2-52ed-7868d5fcc691",
+          "selected_api": "CodeCLIAPI@1.0.1",
+          "title": null,
+          "authentication_id": null
+        },
+        "17": {
+          "id": 17,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "table_id": "01M16VXHHED48TD9HK6W7ZVWGT",
+            "new__data__f1": "{{=output['378216588'][\"content_id\"]}}",
+            "new__data__f3": "{{=output[\"378188172\"][\"agent_response\"][\"selected_topic\"]}}",
+            "new__data__f4": "{{=output[\"378188172\"][\"agent_response\"][\"selected_product\"]}}",
+            "new__data__f5": "{{=output[\"378188172\"][\"agent_response\"][\"target_audience\"]}}",
+            "new__data__f6": "{{=output[\"378188172\"][\"agent_response\"][\"content_type\"]}}",
+            "new__data__f7": "{{=output[\"378188172\"][\"agent_response\"][\"goal\"]}}",
+            "new__data__f8": "{{=output['378214716'][\"agent_response\"][\"revised_hook\"]}}",
+            "new__data__f9": "{{=output['378214716'][\"agent_response\"][\"revised_caption\"]}}",
+            "new__data__f10": "{{=output['378214716'][\"agent_response\"][\"revised_cta\"]}}",
+            "new__data__f11": "{{=output['378214716'][\"agent_response\"][\"revised_hashtags\"]}}",
+            "new__data__f12": "{{=output['378214716'][\"agent_response\"][\"revised_visual_concept\"]}}",
+            "new__data__f13": "{{=output['378214716'][\"agent_response\"][\"overall_score\"]}}",
+            "new__data__f14": "{{=output['378214716'][\"agent_response\"][\"feedback\"]}}",
+            "new__data__f15": "2",
+            "new__data__f16": "Needs Human Review",
+            "new__data__f17": "{{zap_meta_human_now}}",
+            "new__data__f2": "{{zap_meta_human_now}}",
+            "new__data__f21": "Failed quality threshold after 2 rewrites."
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "missing_field_mapping": [
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__selected_topic",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__selected_product",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__target_audience",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__content_type",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__goal",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1788034055825",
+                  "giveKey": "agent_response__revised_hook",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 13,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1788034055825",
+                  "giveKey": "agent_response__revised_caption",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 13,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1788034055825",
+                  "giveKey": "agent_response__revised_cta",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 13,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1788034055825",
+                  "giveKey": "agent_response__revised_hashtags",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 13,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1788034055825",
+                  "giveKey": "agent_response__revised_visual_concept",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 13,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1788034055825",
+                  "giveKey": "agent_response__overall_score",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 13,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1788034055825",
+                  "giveKey": "agent_response__feedback",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 13,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1788034055825",
+                  "giveKey": "status",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 13,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                }
+              ],
+              "replaced_step_id": "_GEN_1788034055836"
+            },
+            "parammap": {
+              "table_id": "[Table] Instagram Content Calendar"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 16,
+          "root_id": 1,
+          "action": "create_record",
+          "selected_api": "TableCLIAPI@1.26.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "18": {
+          "id": 18,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "body_type": "plain",
+            "render_signature_in_html": false,
+            "signature_delimiter": true,
+            "send_to_groups": false,
+            "subject": "Instagram Post Awaiting Approval — {{=output[\"378214721\"][\"new\"][\"data\"][\"f1\"]}}",
+            "body": "This post did not reach the required AI quality score after 2 rewrites.\r\n\r\nPlease review it manually.\r\n\r\nFinal Critic Score:\r\n{{=output[\"378214721\"][\"new\"][\"data\"][\"f13\"]}}\r\n\r\nCritic Feedback:\r\n{{=output[\"378214721\"][\"new\"][\"data\"][\"f14\"]}}\r\n\r\nStatus:\r\nNeeds Human Review",
+            "to": [
+              "zaynbaloch89@gmail.com"
+            ]
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "missing_field_mapping": [
+                {
+                  "stepId": "378214719",
+                  "giveKey": "new__data__f1",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 18,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214719",
+                  "giveKey": "new__data__f3",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 18,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214719",
+                  "giveKey": "new__data__f4",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 18,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214719",
+                  "giveKey": "new__data__f5",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 18,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214719",
+                  "giveKey": "new__data__f6__label",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 18,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214719",
+                  "giveKey": "new__data__f7__label",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 18,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214719",
+                  "giveKey": "new__data__f8",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 18,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214719",
+                  "giveKey": "new__data__f9",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 18,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214719",
+                  "giveKey": "new__data__f10",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 18,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214719",
+                  "giveKey": "new__data__f11",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 18,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214719",
+                  "giveKey": "new__data__f12",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 18,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214719",
+                  "giveKey": "new__data__f13",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 18,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214719",
+                  "giveKey": "new__data__f14",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 18,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214719",
+                  "giveKey": "new__data__f15",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 18,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                }
+              ],
+              "replaced_step_id": "_GEN_1788081013048"
+            },
+            "parammap": {}
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 17,
+          "root_id": 1,
+          "action": "message",
+          "selected_api": "GoogleMailV2CLIAPI@2.14.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "19": {
+          "id": 19,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "table_id": "01M194GG48MZ6XCDTC98PWJ9D2",
+            "record_id": "01M194JAYBEWGR67P0K30WYD6D",
+            "field_data_key": "data__f2",
+            "increment_amount": "1"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "replaced_step_id": "_GEN_1788087667968"
+            },
+            "parammap": {
+              "table_id": "[Table] System Counters",
+              "record_id": "Instagram Content"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 13,
+          "root_id": 1,
+          "action": "increment_value",
+          "selected_api": "TableCLIAPI@1.26.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "20": {
+          "id": 20,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "packages_enabled": false,
+            "input": {
+              "number": "{{=output['378216585'][\"new\"][\"data\"][\"f2\"]}}"
+            },
+            "code": "const num = Number(inputData.number);\n\nreturn {\n  content_id: `IG-2026-${String(num).padStart(3, '0')}`\n};"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "missing_field_mapping": [
+                {
+                  "stepId": "_GEN_1788081013059",
+                  "giveKey": "new__data__f2",
+                  "stepTitle": "Increment or Decrement Value in Zapier Tables",
+                  "stepNumber": 14,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                }
+              ],
+              "replaced_step_id": "_GEN_1788087667969"
+            },
+            "parammap": {}
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 19,
+          "root_id": 1,
+          "action": "01929fad-d3dd-62c2-52ed-7868d5fcc691",
+          "selected_api": "CodeCLIAPI@1.0.1",
+          "title": null,
+          "authentication_id": null
+        },
+        "21": {
+          "id": 21,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "table_id": "01M16VXHHED48TD9HK6W7ZVWGT",
+            "new__data__f1": "{{=output['378216586'][\"content_id\"]}}",
+            "new__data__f3": "{{=output[\"378188172\"][\"agent_response\"][\"selected_topic\"]}}",
+            "new__data__f4": "{{=output[\"378188172\"][\"agent_response\"][\"selected_product\"]}}",
+            "new__data__f5": "{{=output[\"378188172\"][\"agent_response\"][\"target_audience\"]}}",
+            "new__data__f6": "{{=output[\"378188172\"][\"agent_response\"][\"content_type\"]}}",
+            "new__data__f7": "{{=output[\"378188172\"][\"agent_response\"][\"goal\"]}}",
+            "new__data__f8": "{{=output['378214716'][\"agent_response\"][\"revised_hook\"]}}",
+            "new__data__f9": "{{=output['378214716'][\"agent_response\"][\"revised_caption\"]}}",
+            "new__data__f10": "{{=output['378214716'][\"agent_response\"][\"revised_cta\"]}}",
+            "new__data__f11": "{{=output['378214716'][\"agent_response\"][\"revised_hashtags\"]}}",
+            "new__data__f12": "{{=output['378214716'][\"agent_response\"][\"revised_visual_concept\"]}}",
+            "new__data__f13": "{{=output['378214716'][\"agent_response\"][\"overall_score\"]}}",
+            "new__data__f14": "{{=output['378214716'][\"agent_response\"][\"feedback\"]}}",
+            "new__data__f15": "2",
+            "new__data__f16": "Awaiting Approval",
+            "new__data__f17": "{{zap_meta_human_now}}",
+            "new__data__f2": "{{zap_meta_human_now}}"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "missing_field_mapping": [
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__selected_topic",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__selected_product",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__target_audience",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__content_type",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__goal",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1788034055813",
+                  "giveKey": "agent_response__response_text__revised_hook",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 7,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1788034055813",
+                  "giveKey": "agent_response__response_text__revised_caption",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 7,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1788034055813",
+                  "giveKey": "agent_response__response_text__revised_cta",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 7,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1788034055813",
+                  "giveKey": "agent_response__response_text__revised_hashtags",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 7,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1788034055813",
+                  "giveKey": "agent_response__response_text__revised_visual_concept",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 7,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1788034055818",
+                  "giveKey": "agent_response__overall_score",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 8,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1788034055818",
+                  "giveKey": "agent_response__feedback",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 8,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "_GEN_1788034055818",
+                  "giveKey": "status",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 8,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                }
+              ],
+              "replaced_step_id": "_GEN_1788034055833"
+            },
+            "parammap": {
+              "table_id": "[Table] Instagram Content Calendar"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 20,
+          "root_id": 1,
+          "action": "create_record",
+          "selected_api": "TableCLIAPI@1.26.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "22": {
+          "id": 22,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "body_type": "plain",
+            "render_signature_in_html": false,
+            "signature_delimiter": true,
+            "send_to_groups": false,
+            "subject": "Instagram Post Awaiting Approval — {{=output[\"378214719\"][\"new\"][\"data\"][\"f1\"]}}",
+            "body": "A new Instagram post has passed AI quality review and is awaiting human approval.\r\n\r\nContent ID:\r\n{{=output[\"378214719\"][\"new\"][\"data\"][\"f1\"]}}\r\n\r\nTopic:\r\n{{=output[\"378214719\"][\"new\"][\"data\"][\"f3\"]}}\r\n\r\nProduct:\r\n{{=output[\"378214719\"][\"new\"][\"data\"][\"f4\"]}}\r\n\r\nTarget Audience:\r\n{{=output[\"378214719\"][\"new\"][\"data\"][\"f5\"]}}\r\n\r\nContent Type:\r\n{{=output[\"378214719\"][\"new\"][\"data\"][\"f6\"][\"label\"]}}\r\n\r\nGoal:\r\n{{=output[\"378214719\"][\"new\"][\"data\"][\"f7\"][\"label\"]}}\r\n\r\nHook:\r\n{{=output[\"378214719\"][\"new\"][\"data\"][\"f8\"]}}\r\n\r\nCaption:\r\n{{=output[\"378214719\"][\"new\"][\"data\"][\"f9\"]}}\r\n\r\nCTA:\r\n{{=output[\"378214719\"][\"new\"][\"data\"][\"f10\"]}}\r\n\r\nHashtags:\n\r{{=output[\"378214719\"][\"new\"][\"data\"][\"f11\"]}}\r\n\r\nVisual Concept:\n{{=output[\"378214719\"][\"new\"][\"data\"][\"f12\"]}}\r\n\r\n\r\nQuality Score:\r\n{{=output[\"378214719\"][\"new\"][\"data\"][\"f13\"]}}\r\n\r\nCritic Feedback:\r\n{{=output[\"378214719\"][\"new\"][\"data\"][\"f14\"]}}\r\n\r\nRevision Count:\r\n{{=output[\"378214719\"][\"new\"][\"data\"][\"f15\"]}}\r\n\r\nCurrent Status:\r\nAwaiting Approval\r\n\r\nPlease review the content before publishing.\r\n\r\nThis workflow does not publish automatically.",
+            "to": [
+              "zaynbaloch89@gmail.com"
+            ]
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "missing_field_mapping": [
+                {
+                  "stepId": "378214708",
+                  "giveKey": "new__data__f1",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214714",
+                  "giveKey": "new__data__f1",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 12,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214714",
+                  "giveKey": "new__data__f3",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 12,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214714",
+                  "giveKey": "new__data__f4",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 12,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214714",
+                  "giveKey": "new__data__f5",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 12,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214714",
+                  "giveKey": "new__data__f6__label",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 12,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214714",
+                  "giveKey": "new__data__f7__label",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 12,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214714",
+                  "giveKey": "new__data__f8",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 12,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214714",
+                  "giveKey": "new__data__f9",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 12,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214714",
+                  "giveKey": "new__data__f10",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 12,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214714",
+                  "giveKey": "new__data__f11",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 12,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214714",
+                  "giveKey": "new__data__f12",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 12,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214714",
+                  "giveKey": "new__data__f13",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 12,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214714",
+                  "giveKey": "new__data__f14",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 12,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214714",
+                  "giveKey": "new__data__f15",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 12,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                }
+              ],
+              "replaced_step_id": "_GEN_1788081013041"
+            },
+            "parammap": {}
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 21,
+          "root_id": 1,
+          "action": "message",
+          "selected_api": "GoogleMailV2CLIAPI@2.14.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "23": {
+          "id": 23,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "table_id": "01M194GG48MZ6XCDTC98PWJ9D2",
+            "record_id": "01M194JAYBEWGR67P0K30WYD6D",
+            "field_data_key": "data__f2",
+            "increment_amount": "1"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "replaced_step_id": "_GEN_1788081013057"
+            },
+            "parammap": {
+              "table_id": "[Table] System Counters",
+              "record_id": "Instagram Content"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 9,
+          "root_id": 1,
+          "action": "increment_value",
+          "selected_api": "TableCLIAPI@1.26.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "24": {
+          "id": 24,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "packages_enabled": false,
+            "input": {
+              "number": "{{=output['378216583'][\"new\"][\"data\"][\"f2\"]}}"
+            },
+            "code": "const num = Number(inputData.number);\n\nreturn {\n  content_id: `IG-2026-${String(num).padStart(3, '0')}`\n};"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "missing_field_mapping": [
+                {
+                  "stepId": "_GEN_1788081013051",
+                  "giveKey": "new__data__f2",
+                  "stepTitle": "Increment or Decrement Value in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                }
+              ],
+              "replaced_step_id": "_GEN_1788087667961"
+            },
+            "parammap": {}
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 23,
+          "root_id": 1,
+          "action": "01929fad-d3dd-62c2-52ed-7868d5fcc691",
+          "selected_api": "CodeCLIAPI@1.0.1",
+          "title": null,
+          "authentication_id": null
+        },
+        "25": {
+          "id": 25,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "table_id": "01M16VXHHED48TD9HK6W7ZVWGT",
+            "new__data__f1": "{{=output['378216584'][\"content_id\"]}}",
+            "new__data__f3": "{{=output[\"378188172\"][\"agent_response\"][\"selected_topic\"]}}",
+            "new__data__f4": "{{=output[\"378188172\"][\"agent_response\"][\"selected_product\"]}}",
+            "new__data__f5": "{{=output[\"378188172\"][\"agent_response\"][\"target_audience\"]}}",
+            "new__data__f6": "{{=output[\"378188172\"][\"agent_response\"][\"content_type\"]}}",
+            "new__data__f7": "{{=output[\"378188172\"][\"agent_response\"][\"goal\"]}}",
+            "new__data__f8": "{{=output['378214710'][\"agent_response\"][\"response_text\"][\"revised_hook\"]}}",
+            "new__data__f9": "{{=output['378214710'][\"agent_response\"][\"response_text\"][\"revised_caption\"]}}",
+            "new__data__f10": "{{=output['378214710'][\"agent_response\"][\"response_text\"][\"revised_cta\"]}}",
+            "new__data__f11": "{{=output['378214710'][\"agent_response\"][\"response_text\"][\"revised_hashtags\"]}}",
+            "new__data__f12": "{{=output['378214710'][\"agent_response\"][\"response_text\"][\"revised_visual_concept\"]}}",
+            "new__data__f13": "{{=output['378214711'][\"agent_response\"][\"overall_score\"]}}",
+            "new__data__f14": "{{=output['378214711'][\"agent_response\"][\"feedback\"]}}",
+            "new__data__f15": "1",
+            "new__data__f16": "Awaiting Approval",
+            "new__data__f17": "{{zap_meta_human_now}}",
+            "new__data__f2": "{{zap_meta_human_now}}"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "missing_field_mapping": [
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__selected_topic",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__selected_product",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__target_audience",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__content_type",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__goal",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__hook",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__caption",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__cta",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__hashtags",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__visual_concept",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__critic_overall_score",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378188172",
+                  "giveKey": "agent_response__critic_feedback",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378188172",
+                  "giveKey": "status",
+                  "stepTitle": "Run Agent in Agents",
+                  "stepNumber": 2,
+                  "app": "App222036CLIAPI@3.1.0",
+                  "hadMappingAtCopyTime": true
+                }
+              ],
+              "replaced_step_id": "_GEN_1788034055822"
+            },
+            "parammap": {
+              "table_id": "[Table] Instagram Content Calendar"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 24,
+          "root_id": 1,
+          "action": "create_record",
+          "selected_api": "TableCLIAPI@1.26.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "26": {
+          "id": 26,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "body_type": "plain",
+            "render_signature_in_html": false,
+            "signature_delimiter": true,
+            "send_to_groups": false,
+            "subject": "Instagram Post Awaiting Approval — {{=output[\"378214714\"][\"new\"][\"data\"][\"f1\"]}}",
+            "body": "A new Instagram post has passed AI quality review and is awaiting human approval.\r\n\r\nContent ID:\r\n{{=output[\"378214714\"][\"new\"][\"data\"][\"f1\"]}}\r\n\r\nTopic:\r\n{{=output[\"378214714\"][\"new\"][\"data\"][\"f3\"]}}\r\n\r\nProduct:\r\n{{=output[\"378214714\"][\"new\"][\"data\"][\"f4\"]}}\r\n\r\nTarget Audience:\r\n{{=output[\"378214714\"][\"new\"][\"data\"][\"f5\"]}}\r\n\r\nContent Type:\r\n{{=output[\"378214714\"][\"new\"][\"data\"][\"f6\"][\"label\"]}}\r\n\r\nGoal:\r\n{{=output[\"378214714\"][\"new\"][\"data\"][\"f7\"][\"label\"]}}\r\n\r\nHook:\r\n{{=output[\"378214714\"][\"new\"][\"data\"][\"f8\"]}}\r\n\r\nCaption:\r\n{{=output[\"378214714\"][\"new\"][\"data\"][\"f9\"]}}\r\n\r\nCTA:\r\n{{=output[\"378214714\"][\"new\"][\"data\"][\"f10\"]}}\r\n\r\nHashtags:\n\r{{=output[\"378214714\"][\"new\"][\"data\"][\"f11\"]}}\r\n\r\nVisual Concept:\n{{=output[\"378214714\"][\"new\"][\"data\"][\"f12\"]}}\r\n\r\n\r\nQuality Score:\r\n{{=output[\"378214714\"][\"new\"][\"data\"][\"f13\"]}}\r\n\r\nCritic Feedback:\r\n{{=output[\"378214714\"][\"new\"][\"data\"][\"f14\"]}}\r\n\r\nRevision Count:\r\n{{=output[\"378214714\"][\"new\"][\"data\"][\"f15\"]}}\r\n\r\nCurrent Status:\r\nAwaiting Approval\r\n\r\nPlease review the content before publishing.\r\n\r\nThis workflow does not publish automatically.",
+            "to": [
+              "zaynbaloch89@gmail.com"
+            ]
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false,
+              "missing_field_mapping": [
+                {
+                  "stepId": "378214708",
+                  "giveKey": "new__data__f1",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214708",
+                  "giveKey": "new__data__f3",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214708",
+                  "giveKey": "new__data__f4",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214708",
+                  "giveKey": "new__data__f5",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214708",
+                  "giveKey": "new__data__f6__label",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214708",
+                  "giveKey": "new__data__f7__label",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214708",
+                  "giveKey": "new__data__f8",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214708",
+                  "giveKey": "new__data__f9",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214708",
+                  "giveKey": "new__data__f10",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214708",
+                  "giveKey": "new__data__f11",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214708",
+                  "giveKey": "new__data__f12",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214708",
+                  "giveKey": "new__data__f13",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214708",
+                  "giveKey": "new__data__f14",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                },
+                {
+                  "stepId": "378214708",
+                  "giveKey": "new__data__f15",
+                  "stepTitle": "Create Record in Zapier Tables",
+                  "stepNumber": 5,
+                  "app": "TableCLIAPI@1.26.0",
+                  "hadMappingAtCopyTime": true
+                }
+              ],
+              "replaced_step_id": "_GEN_1788081013034"
+            },
+            "parammap": {}
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 25,
+          "root_id": 1,
+          "action": "message",
+          "selected_api": "GoogleMailV2CLIAPI@2.14.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "27": {
+          "id": 27,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "table_id": "01M194GG48MZ6XCDTC98PWJ9D2",
+            "record_id": "01M194JAYBEWGR67P0K30WYD6D",
+            "field_data_key": "data__f2",
+            "increment_amount": "1"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "table_id": "[Table] System Counters",
+              "record_id": "Instagram Content"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 4,
+          "root_id": 1,
+          "action": "increment_value",
+          "selected_api": "TableCLIAPI@1.26.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "28": {
+          "id": 28,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "packages_enabled": false,
+            "input": {
+              "number": "{{=output['378216581'][\"new\"][\"data\"][\"f2\"]}}"
+            },
+            "code": "const num = Number(inputData.number);\n\nreturn {\n  content_id: `IG-2026-${String(num).padStart(3, '0')}`\n};"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {}
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 27,
+          "root_id": 1,
+          "action": "01929fad-d3dd-62c2-52ed-7868d5fcc691",
+          "selected_api": "CodeCLIAPI@1.0.1",
+          "title": null,
+          "authentication_id": null
+        },
+        "29": {
+          "id": 29,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "table_id": "01M16VXHHED48TD9HK6W7ZVWGT",
+            "new__data__f1": "{{=output['378216582'][\"content_id\"]}}",
+            "new__data__f3": "{{=output[\"378188172\"][\"agent_response\"][\"selected_topic\"]}}",
+            "new__data__f4": "{{=output[\"378188172\"][\"agent_response\"][\"selected_product\"]}}",
+            "new__data__f5": "{{=output[\"378188172\"][\"agent_response\"][\"target_audience\"]}}",
+            "new__data__f6": "{{=output[\"378188172\"][\"agent_response\"][\"content_type\"]}}",
+            "new__data__f7": "{{=output[\"378188172\"][\"agent_response\"][\"goal\"]}}",
+            "new__data__f8": "{{=output[\"378188172\"][\"agent_response\"][\"hook\"]}}",
+            "new__data__f9": "{{=output[\"378188172\"][\"agent_response\"][\"caption\"]}}",
+            "new__data__f10": "{{=output[\"378188172\"][\"agent_response\"][\"cta\"]}}",
+            "new__data__f11": "{{=output[\"378188172\"][\"agent_response\"][\"hashtags\"]}}",
+            "new__data__f12": "{{=output[\"378188172\"][\"agent_response\"][\"visual_concept\"]}}",
+            "new__data__f13": "{{=output[\"378188172\"][\"agent_response\"][\"critic_overall_score\"]}}",
+            "new__data__f14": "{{=output[\"378188172\"][\"agent_response\"][\"critic_feedback\"]}}",
+            "new__data__f15": "0",
+            "new__data__f16": "Awaiting Approval",
+            "new__data__f17": "{{zap_meta_human_now}}",
+            "new__data__f2": "{{zap_meta_human_now}}"
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {
+              "table_id": "[Table] Instagram Content Calendar"
+            }
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 28,
+          "root_id": 1,
+          "action": "create_record",
+          "selected_api": "TableCLIAPI@1.26.0",
+          "title": null,
+          "authentication_id": null
+        },
+        "30": {
+          "id": 30,
+          "paused": true,
+          "type_of": "write",
+          "params": {
+            "body_type": "plain",
+            "render_signature_in_html": false,
+            "signature_delimiter": true,
+            "send_to_groups": false,
+            "subject": "Instagram Post Awaiting Approval — {{=output[\"378214708\"][\"new\"][\"data\"][\"f1\"]}}",
+            "body": "A new Instagram post has passed AI quality review and is awaiting human approval.\r\n\r\nContent ID:\r\n{{=output[\"378214708\"][\"new\"][\"data\"][\"f1\"]}}\r\n\r\nTopic:\r\n{{=output[\"378214708\"][\"new\"][\"data\"][\"f3\"]}}\r\n\r\nProduct:\r\n{{=output[\"378214708\"][\"new\"][\"data\"][\"f4\"]}}\r\n\r\nTarget Audience:\r\n{{=output[\"378214708\"][\"new\"][\"data\"][\"f5\"]}}\r\n\r\nContent Type:\r\n{{=output[\"378214708\"][\"new\"][\"data\"][\"f6\"][\"label\"]}}\r\n\r\nGoal:\r\n{{=output[\"378214708\"][\"new\"][\"data\"][\"f7\"][\"label\"]}}\r\n\r\nHook:\r\n{{=output[\"378214708\"][\"new\"][\"data\"][\"f8\"]}}\r\n\r\nCaption:\r\n{{=output[\"378214708\"][\"new\"][\"data\"][\"f9\"]}}\r\n\r\nCTA:\r\n{{=output[\"378214708\"][\"new\"][\"data\"][\"f10\"]}}\r\n\r\nHashtags:\n\r{{=output[\"378214708\"][\"new\"][\"data\"][\"f11\"]}}\r\n\r\nVisual Concept:\n{{=output[\"378214708\"][\"new\"][\"data\"][\"f12\"]}}\r\n\r\n\r\nQuality Score:\r\n{{=output[\"378214708\"][\"new\"][\"data\"][\"f13\"]}}\r\n\r\nCritic Feedback:\r\n{{=output[\"378214708\"][\"new\"][\"data\"][\"f14\"]}}\r\n\r\nRevision Count:\r\n{{=output[\"378214708\"][\"new\"][\"data\"][\"f15\"]}}\r\n\r\nCurrent Status:\r\nAwaiting Approval\r\n\r\nPlease review the content before publishing.\r\n\r\nThis workflow does not publish automatically.",
+            "to": [
+              "zaynbaloch89@gmail.com"
+            ]
+          },
+          "meta": {
+            "$editor": {
+              "has_automatic_issues": false
+            },
+            "parammap": {}
+          },
+          "triple_stores": {
+            "copied_from": null,
+            "created_by": null,
+            "polling_interval_override": 0,
+            "block_and_release_limit_override": 0,
+            "spread_tasks": 1
+          },
+          "parent_id": 29,
+          "root_id": 1,
+          "action": "message",
+          "selected_api": "GoogleMailV2CLIAPI@2.14.0",
+          "title": null,
+          "authentication_id": null
+        }
+      }
+    }
+  ]
+}
