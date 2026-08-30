@@ -126,7 +126,7 @@
                 "id": 6401848384930395,
                 "group": 8650398753607325,
                 "key": "{{=output[\"378188172\"][\"agent_response\"][\"critic_overall_score\"]}}",
-                "value": "9",
+                "value": "7",
                 "match": "igreater",
                 "action": "continue"
               },
@@ -174,7 +174,7 @@
                 "id": 6165293580529782,
                 "group": 5324223450702897,
                 "key": "{{=output[\"378188172\"][\"agent_response\"][\"critic_overall_score\"]}}",
-                "value": "9",
+                "value": "7",
                 "match": "iless",
                 "action": "continue"
               }
@@ -316,7 +316,7 @@
                 "id": 5676568991058893,
                 "group": 7987767388667771,
                 "key": "{{=output['378214711'][\"agent_response\"][\"overall_score\"]}}",
-                "value": "9",
+                "value": "7",
                 "match": "igreater",
                 "action": "continue"
               },
@@ -364,7 +364,7 @@
                 "id": 2568517664542210,
                 "group": 468901057456859,
                 "key": "{{=output['378214711'][\"agent_response\"][\"overall_score\"]}}",
-                "value": "9",
+                "value": "7",
                 "match": "iless",
                 "action": "continue"
               }
@@ -480,7 +480,7 @@
                 "id": 6822731061718617,
                 "group": 1006583117632286,
                 "key": "{{=output['378214716'][\"agent_response\"][\"overall_score\"]}}",
-                "value": "9",
+                "value": "7",
                 "match": "igreater",
                 "action": "continue"
               }
@@ -520,7 +520,7 @@
                 "id": 7071856503356180,
                 "group": 8868887308146105,
                 "key": "{{=output['378214716'][\"agent_response\"][\"overall_score\"]}}",
-                "value": "9",
+                "value": "7",
                 "match": "iless",
                 "action": "continue"
               }
