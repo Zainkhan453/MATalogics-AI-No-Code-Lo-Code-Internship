@@ -15,6 +15,7 @@ Each day is stored in its own folder containing the workflows, API collections, 
 | **Day 6** | Airtable as a no-code database + n8n — CRUD operations and five automation workflows (leads, onboarding, projects, AI-agent monitoring, internship tracker) | [`Day-06/`](Day-06/) |
 | **Day 7** | End-to-end AI Client Onboarding System — Vapi voice agent → n8n → OpenAI classification → Airtable + Notion + Slack, with priority-based alerts | [`Day-07/`](Day-07/) |
 | **Days 8–14** | Nine Zapier projects covering Interfaces, Tables, Chatbots, Kanban pipelines and autonomous agents | [`Day 8-14/`](Day%208-14/) |
+| **Days 14–17** | PostgreSQL, Supabase, relational design, AI database automation, persistent memory, safe NL-to-SQL, and automated reporting | [`Databasetasks/`](Databasetasks/) |
 
 ---
 
@@ -23,6 +24,8 @@ Each day is stored in its own folder containing the workflows, API collections, 
 This repository documents a hands-on internship in AI automation. The focus is on building real, working backends without writing a traditional server — using **n8n** for workflow orchestration, **Google Sheets** as a lightweight data store, and **Postman** for API testing and documentation.
 
 Days 8–14 extend the portfolio into **Zapier Interfaces, Tables, Paths, Chatbots, Kanban workflows and autonomous AI agents**. Progress is tracked inside the [`Day 8-14`](Day%208-14/) folder so each project can be committed as it is completed.
+
+Days 14–17 cover **SQL database development and AI database automation**. The complete task index, completion notes, n8n exports, SQL documentation, and screenshot evidence are available in [`Databasetasks`](Databasetasks/).
 
 Day 3 delivers a complete **Lead Management REST API**: four endpoints, full CRUD, validation, proper status codes, and a Postman collection that exercises every route.
 

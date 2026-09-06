@@ -27,3 +27,15 @@ tmp/
 /Day 8-14/2. INTERFACE + FORM + TABLE  EMPLOYEE EXPENSE APPROVAL/Screenshots/Screenshot 2026-08-25 022221.png
 /Day 8-14/2. INTERFACE + FORM + TABLE  EMPLOYEE EXPENSE APPROVAL/Screenshots/Screenshot 2026-08-25 022233.png
 /Day 8-14/2. INTERFACE + FORM + TABLE  EMPLOYEE EXPENSE APPROVAL/Screenshots/Screenshot 2026-08-25 022425.png
+
+# Original database-task screenshots containing personal email addresses.
+# Public-safe redacted copies are committed and linked from the task READMEs.
+/Databasetasks/Task-6-AI-Lead-Qualification/images/Screenshot 2026-09-06 010113.png
+/Databasetasks/Task-9-Automated-Database-Reporting/screenshots/14-gmail-send-success.png
+/Databasetasks/Task-9-Automated-Database-Reporting/screenshots/15-gmail-received-initial-report.png
+/Databasetasks/Task-9-Automated-Database-Reporting/screenshots/20-final-gmail-conversion-report.png
+
+# Credential-setup screens retained locally but excluded from the public repository.
+/Databasetasks/Task-5-Lead-Capture-Automation/assets/02_neon_connection_details.png
+/Databasetasks/Task-5-Lead-Capture-Automation/assets/04_supabase_api_keys.png
+/Databasetasks/Task-5-Lead-Capture-Automation/assets/05_supabase_credential_error.png

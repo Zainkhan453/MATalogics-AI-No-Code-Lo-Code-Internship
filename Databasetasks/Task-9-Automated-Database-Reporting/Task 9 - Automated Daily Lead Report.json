@@ -1,0 +1,671 @@
+{
+  "name": "Task 9 - Automated Daily Lead Report",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "id": "98b63f7d-ea28-402c-b474-e5933914b985",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -2800,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate Report Metadata\n// Produces exactly ONE item holding the identity of today's report.\n// The workflow timezone is Asia/Karachi, so $now is already local time.\n\n// RFC-4122 v4 UUID using only standard JavaScript (no npm imports, no crypto\n// module) so it is safe on n8n Cloud.\nfunction uuidv4() {\n  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {\n    const r = (Math.random() * 16) | 0;\n    const v = c === 'x' ? r : (r & 0x3) | 0x8;\n    return v.toString(16);\n  });\n}\n\nreturn [\n  {\n    json: {\n      report_uuid: uuidv4(),\n      report_date: $now.toFormat('yyyy-MM-dd'),\n      generated_at: $now.toISO(),\n    },\n  },\n];\n"
+      },
+      "id": "f8ad223c-1437-433a-b336-1fad1e4570b4",
+      "name": "Generate Report Metadata",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2576,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n    COUNT(*)::integer AS total_leads,\n\n    COUNT(*) FILTER (\n        WHERE created_at >= CURRENT_DATE\n          AND created_at < CURRENT_DATE + INTERVAL '1 day'\n    )::integer AS new_leads,\n\n    COUNT(*) FILTER (\n        WHERE lead_status = 'Qualified'\n    )::integer AS qualified_leads,\n\n    COUNT(*) FILTER (\n        WHERE is_converted = TRUE\n    )::integer AS converted_leads,\n\n    COALESCE(\n        ROUND(\n            AVG(lead_score)\n            FILTER (WHERE lead_score IS NOT NULL),\n            2\n        ),\n        0\n    ) AS average_lead_score\n\nFROM public.leads;",
+        "options": {}
+      },
+      "id": "49b68613-7dd0-4f97-8713-342237e7a197",
+      "name": "PostgreSQL - Get Daily Metrics",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2352,
+        112
+      ],
+      "executeOnce": true,
+      "credentials": {
+        "postgres": {
+          "id": "pZzol6bydrPh0r44",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n    COALESCE(source, 'Unknown') AS source,\n    COUNT(*)::integer AS lead_count\nFROM public.leads\nGROUP BY COALESCE(source, 'Unknown')\nORDER BY lead_count DESC, source ASC\nLIMIT 1;",
+        "options": {}
+      },
+      "id": "d303ef2c-8a51-45c1-a08e-27b79d352f79",
+      "name": "PostgreSQL - Get Top Source",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2144,
+        112
+      ],
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "pZzol6bydrPh0r44",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n    id,\n    lead_uuid,\n    name,\n    company,\n    source,\n    lead_score,\n    lead_status,\n    lead_category,\n    is_converted\nFROM public.leads\nWHERE lead_score IS NOT NULL\nORDER BY lead_score DESC, id ASC\nLIMIT 5;",
+        "options": {}
+      },
+      "id": "d67928fb-5cad-46f9-a756-abbd2c67f09f",
+      "name": "PostgreSQL - Get Top 5 Leads",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1920,
+        112
+      ],
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "pZzol6bydrPh0r44",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n    COALESCE(source, 'Unknown') AS source,\n\n    COUNT(*)::integer AS total_leads,\n\n    COUNT(*) FILTER (\n        WHERE lead_status = 'Qualified'\n    )::integer AS qualified_leads,\n\n    COUNT(*) FILTER (\n        WHERE is_converted = TRUE\n    )::integer AS converted_leads,\n\n    ROUND(\n        100.0 *\n        COUNT(*) FILTER (WHERE lead_status = 'Qualified')\n        / NULLIF(COUNT(*), 0),\n        2\n    ) AS qualification_rate,\n\n    ROUND(\n        100.0 *\n        COUNT(*) FILTER (WHERE is_converted = TRUE)\n        / NULLIF(COUNT(*), 0),\n        2\n    ) AS conversion_rate,\n\n    ROUND(\n        AVG(lead_score)\n        FILTER (WHERE lead_score IS NOT NULL),\n        2\n    ) AS average_score\n\nFROM public.leads\nGROUP BY COALESCE(source, 'Unknown')\nORDER BY total_leads DESC, source ASC;",
+        "options": {}
+      },
+      "id": "2255b7fe-69a4-4587-8a15-8ea09dce42bf",
+      "name": "PostgreSQL - Get Source Performance",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1696,
+        112
+      ],
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "pZzol6bydrPh0r44",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Calculate Report Statistics\n// Collapses the metadata item and ALL PostgreSQL result sets into exactly ONE\n// item. This is the node that guarantees one AI call, one Supabase row and one\n// email per execution.\n\nconst meta = $('Generate Report Metadata').first().json;\nconst metrics = $('PostgreSQL - Get Daily Metrics').first().json;\n\nfunction toInt(value) {\n  const n = Number(value);\n  return Number.isFinite(n) ? Math.trunc(n) : 0;\n}\n\nfunction toNum(value) {\n  const n = Number(value);\n  return Number.isFinite(n) ? Number(n.toFixed(2)) : 0;\n}\n\nfunction toText(value, fallback) {\n  if (value === null || value === undefined || value === '') return fallback;\n  return String(value);\n}\n\nconst totalLeads = toInt(metrics.total_leads);\nconst newLeads = toInt(metrics.new_leads);\nconst qualifiedLeads = toInt(metrics.qualified_leads);\nconst convertedLeads = toInt(metrics.converted_leads);\nconst averageLeadScore = toNum(metrics.average_lead_score);\n\n// --- Top source -----------------------------------------------------------\n// Returns at most one row, and NO rows when the leads table is empty.\n// \"Always Output Data\" is enabled on that node, so an empty run yields {}.\nlet topSource = 'N/A';\nlet topSourceLeadCount = 0;\nconst topSourceRows = $('PostgreSQL - Get Top Source').all();\nif (topSourceRows.length > 0 && topSourceRows[0].json && topSourceRows[0].json.source) {\n  topSource = String(topSourceRows[0].json.source);\n  topSourceLeadCount = toInt(topSourceRows[0].json.lead_count);\n}\n\n// --- Top 5 leads ----------------------------------------------------------\n// 0..5 rows flattened into ONE array. The `id` guard drops the placeholder\n// item that \"Always Output Data\" emits when the query matched nothing.\nconst top5Leads = $('PostgreSQL - Get Top 5 Leads')\n  .all()\n  .map(function (item) {\n    return item.json;\n  })\n  .filter(function (row) {\n    return row && row.id !== undefined && row.id !== null;\n  })\n  .map(function (row) {\n    return {\n      id: toInt(row.id),\n      lead_uuid: row.lead_uuid === null || row.lead_uuid === undefined ? null : String(row.lead_uuid),\n      name: toText(row.name, 'N/A'),\n      company: toText(row.company, 'N/A'),\n      source: toText(row.source, 'N/A'),\n      lead_score: toInt(row.lead_score),\n      lead_status: toText(row.lead_status, 'N/A'),\n      lead_category: toText(row.lead_category, 'N/A'),\n      is_converted: row.is_converted === true,\n    };\n  });\n\n// --- Source performance ---------------------------------------------------\n// 0..N rows flattened into ONE array so the AI can comment on per-source\n// performance without inventing it.\nconst sourcePerformance = $('PostgreSQL - Get Source Performance')\n  .all()\n  .map(function (item) {\n    return item.json;\n  })\n  .filter(function (row) {\n    return row && row.source !== undefined && row.source !== null;\n  })\n  .map(function (row) {\n    return {\n      source: String(row.source),\n      total_leads: toInt(row.total_leads),\n      qualified_leads: toInt(row.qualified_leads),\n      converted_leads: toInt(row.converted_leads),\n      qualification_rate: toNum(row.qualification_rate),\n      conversion_rate: toNum(row.conversion_rate),\n      average_score: toNum(row.average_score),\n    };\n  });\n\n// --- Conversion rate ------------------------------------------------------\nconst conversionRate =\n  totalLeads > 0 ? Number(((convertedLeads / totalLeads) * 100).toFixed(2)) : 0;\n\nreturn [\n  {\n    json: {\n      report_uuid: meta.report_uuid,\n      report_date: meta.report_date,\n      generated_at: meta.generated_at,\n\n      total_leads: totalLeads,\n      new_leads: newLeads,\n      qualified_leads: qualifiedLeads,\n      converted_leads: convertedLeads,\n      average_lead_score: averageLeadScore,\n\n      top_source: topSource,\n      top_source_lead_count: topSourceLeadCount,\n\n      conversion_rate: conversionRate,\n\n      top_5_leads: top5Leads,\n      source_performance: sourcePerformance,\n    },\n  },\n];\n"
+      },
+      "id": "49753205-2651-437e-864e-aae5d6a6448a",
+      "name": "Calculate Report Statistics",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1472,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare AI Report Data\n// Builds ONE clean, serialized prompt payload containing only values that were\n// calculated from the database. The AI is never asked to compute a metric.\n\nconst r = $('Calculate Report Statistics').first().json;\n\nfunction dp2(value) {\n  return Number(value).toFixed(2);\n}\n\nconst topLeadsText =\n  r.top_5_leads.length === 0\n    ? 'No scored leads available.'\n    : r.top_5_leads\n        .map(function (lead, index) {\n          return (\n            String(index + 1) +\n            '. ' +\n            lead.name +\n            ' | Company: ' +\n            lead.company +\n            ' | Source: ' +\n            lead.source +\n            ' | Score: ' +\n            lead.lead_score +\n            ' | Status: ' +\n            lead.lead_status +\n            ' | Converted: ' +\n            (lead.is_converted ? 'Yes' : 'No')\n          );\n        })\n        .join('\\n');\n\nconst sourceText =\n  r.source_performance.length === 0\n    ? 'No source-level performance data available.'\n    : r.source_performance\n        .map(function (s) {\n          return (\n            '- ' +\n            s.source +\n            ': total ' +\n            s.total_leads +\n            ', qualified ' +\n            s.qualified_leads +\n            ' (' +\n            dp2(s.qualification_rate) +\n            '%), converted ' +\n            s.converted_leads +\n            ' (' +\n            dp2(s.conversion_rate) +\n            '%), average score ' +\n            dp2(s.average_score)\n          );\n        })\n        .join('\\n');\n\nconst aiInput = [\n  'Report Date: ' + r.report_date,\n  'Total Leads: ' + r.total_leads,\n  'New Leads: ' + r.new_leads,\n  'Qualified Leads: ' + r.qualified_leads,\n  'Converted Leads: ' + r.converted_leads,\n  'Average Lead Score: ' + dp2(r.average_lead_score),\n  'Top Source: ' + r.top_source + ' (' + r.top_source_lead_count + ' leads)',\n  'Conversion Rate: ' + dp2(r.conversion_rate) + '%',\n  '',\n  'Top 5 Leads:',\n  topLeadsText,\n  '',\n  'Source Performance:',\n  sourceText,\n  '',\n  'Write a concise manager-level observation using only this information.',\n].join('\\n');\n\nreturn [{ json: { ai_input: aiInput } }];\n"
+      },
+      "id": "e424934d-b237-4257-9775-537a3f42ccbf",
+      "name": "Prepare AI Report Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1264,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.ai_input }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are a business reporting assistant.\n\nYou are given verified lead metrics calculated directly from the database.\n\nYour job is to write a concise daily business summary for a manager.\n\nRULES:\n\n1. Use only the supplied data.\n2. Do not invent numbers.\n3. Do not modify supplied values.\n4. Do not independently calculate the main metrics.\n5. Highlight meaningful business observations.\n6. Mention important performance signals.\n7. Keep the summary professional and concise.\n8. If data is insufficient for a comparison, explicitly avoid making that comparison.\n9. Do not claim that one source has better qualification or conversion performance unless source-level performance data supports it.\n10. Avoid exaggerated recommendations.\n11. Focus on practical observations useful to a manager.\n12. If there are zero leads, clearly state that there is insufficient lead activity for meaningful performance analysis.\n13. If no leads are converted, do not treat this as an error; simply state that no conversions are recorded.\n14. Mention top lead information when relevant.\n15. Return only the business summary, without markdown code fences."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "id": "b4704d2f-d832-4264-8fbe-8857c74c3f50",
+      "name": "AI - Generate Business Summary",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -1040,
+        112
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 2000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "id": "c64c0a1e-378c-406a-a2e5-91fff92040ee",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1072,
+        336
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "daily_lead_reports",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "report_date",
+              "keyValue": "={{ $('Generate Report Metadata').first().json.report_date }}"
+            }
+          ]
+        }
+      },
+      "id": "0ff7da75-88a9-4445-84ca-e9d9f57c1893",
+      "name": "Supabase - Find Existing Report",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -752,
+        112
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "PH4m2AZJix1xy68l",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Compose Final Report\n// Builds the deterministic manager-facing report text. The AI controls only the\n// summary paragraph, never the report structure or the numbers.\n//\n// This node also resolves the EFFECTIVE report_uuid: report_date is UNIQUE in\n// Supabase, so a re-run on the same day reuses the stored UUID. Doing it here\n// (before storage and before Gmail) keeps the email, the report text and the\n// Supabase row on one identity.\n\nconst r = $('Calculate Report Statistics').first().json;\n\n// --- AI summary, never fabricated ----------------------------------------\nconst AI_FALLBACK =\n  'AI summary unavailable for this execution. Verified database metrics are shown above.';\n\nlet aiSummary = AI_FALLBACK;\ntry {\n  const aiRows = $('AI - Generate Business Summary').all();\n  if (aiRows.length > 0 && aiRows[0].json) {\n    // Basic LLM Chain returns the model response on the `text` field.\n    const raw = aiRows[0].json.text;\n    if (typeof raw === 'string' && raw.trim() !== '') {\n      aiSummary = raw.trim();\n    }\n  }\n} catch (error) {\n  aiSummary = AI_FALLBACK;\n}\n\n// --- Existing Supabase report for this report_date ------------------------\nlet reportExists = false;\nlet existingReportId = null;\nlet effectiveUuid = r.report_uuid;\n\nconst foundRows = $('Supabase - Find Existing Report').all();\nif (\n  foundRows.length > 0 &&\n  foundRows[0].json &&\n  foundRows[0].json.id !== undefined &&\n  foundRows[0].json.id !== null\n) {\n  reportExists = true;\n  existingReportId = foundRows[0].json.id;\n  if (foundRows[0].json.report_uuid) {\n    effectiveUuid = String(foundRows[0].json.report_uuid);\n  }\n}\n\nfunction dp2(value) {\n  return Number(value).toFixed(2);\n}\n\nconst topLeadsBlock =\n  r.top_5_leads.length === 0\n    ? 'No scored leads available.'\n    : r.top_5_leads\n        .map(function (lead, index) {\n          return (\n            String(index + 1) +\n            '. ' +\n            lead.name +\n            ' | ' +\n            lead.company +\n            ' | ' +\n            lead.source +\n            ' | Score: ' +\n            lead.lead_score +\n            ' | Status: ' +\n            lead.lead_status\n          );\n        })\n        .join('\\n');\n\nconst finalReport = [\n  'DAILY LEAD REPORT',\n  '',\n  'Report Date: ' + r.report_date,\n  '',\n  'KEY METRICS',\n  '',\n  'Total Leads: ' + r.total_leads,\n  'New Leads: ' + r.new_leads,\n  'Qualified Leads: ' + r.qualified_leads,\n  'Converted Leads: ' + r.converted_leads,\n  'Average Lead Score: ' + dp2(r.average_lead_score),\n  'Top Source: ' + r.top_source,\n  'Conversion Rate: ' + dp2(r.conversion_rate) + '%',\n  '',\n  'TOP 5 LEADS',\n  '',\n  topLeadsBlock,\n  '',\n  'AI BUSINESS SUMMARY',\n  '',\n  aiSummary,\n  '',\n  'Report UUID: ' + effectiveUuid,\n].join('\\n');\n\nreturn [\n  {\n    json: {\n      // ---- columns of public.daily_lead_reports ----------------------------\n      // These are auto-mapped straight into Supabase, so top_5_leads stays a\n      // real JS array and reaches the JSONB column as a JSON array.\n      report_uuid: effectiveUuid,\n      report_date: r.report_date,\n      total_leads: r.total_leads,\n      new_leads: r.new_leads,\n      qualified_leads: r.qualified_leads,\n      converted_leads: r.converted_leads,\n      average_lead_score: r.average_lead_score,\n      top_source: r.top_source,\n      conversion_rate: r.conversion_rate,\n      top_5_leads: r.top_5_leads,\n      ai_summary: aiSummary,\n      delivery_status: 'pending',\n      generated_at: r.generated_at,\n\n      // ---- workflow-only fields -------------------------------------------\n      // Listed in \"Inputs to Ignore\" on both Supabase write nodes so they are\n      // never sent as columns.\n      final_report: finalReport,\n      report_exists: reportExists,\n      existing_report_id: existingReportId,\n    },\n  },\n];\n"
+      },
+      "id": "719e7c77-caca-4d5d-9c79-2e8a4b8e8c30",
+      "name": "Compose Final Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -560,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cond-report-exists",
+              "leftValue": "={{ $json.report_exists }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "d12228f7-0c33-40e5-a508-9cce28467abb",
+      "name": "IF - Report Exists",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -336,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "daily_lead_reports",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "report_date",
+              "condition": "eq",
+              "keyValue": "={{ $('Generate Report Metadata').first().json.report_date }}"
+            }
+          ]
+        },
+        "dataToSend": "autoMapInputData",
+        "inputsToIgnore": "final_report, report_exists, existing_report_id"
+      },
+      "id": "48828778-c2fe-4583-9138-6bedb52a14b2",
+      "name": "Supabase - Update Daily Report",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        -32
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "PH4m2AZJix1xy68l",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "daily_lead_reports",
+        "dataToSend": "autoMapInputData",
+        "inputsToIgnore": "final_report, report_exists, existing_report_id"
+      },
+      "id": "10e15862-fe92-4f0d-b108-384047d2e9f8",
+      "name": "Supabase - Create Daily Report",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        256
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "PH4m2AZJix1xy68l",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "9a6bafcc-1ec6-43cd-894e-3a067a8b122b",
+      "name": "Continue After Supabase Save",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        144,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "manager@example.com",
+        "subject": "=Daily Lead Report - {{ $('Compose Final Report').first().json.report_date }}",
+        "emailType": "text",
+        "message": "={{ $('Compose Final Report').first().json.final_report }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "2698662e-bb14-4feb-82ab-2c30f987f2dc",
+      "name": "Gmail - Send Daily Lead Report",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        368,
+        112
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 3000,
+      "webhookId": "9a8451bc-87e7-40cd-8356-fc8ce93ce197",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "cXUSF7v97u1t3buo",
+          "name": "Gmail account 2"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "daily_lead_reports",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "report_date",
+              "condition": "eq",
+              "keyValue": "={{ $('Generate Report Metadata').first().json.report_date }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "delivery_status",
+              "fieldValue": "sent"
+            }
+          ]
+        }
+      },
+      "id": "864a00b0-bdee-4f0d-abf6-610a8e03aa41",
+      "name": "Supabase - Mark Delivery Sent",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        608,
+        -16
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "PH4m2AZJix1xy68l",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "daily_lead_reports",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "report_date",
+              "condition": "eq",
+              "keyValue": "={{ $('Generate Report Metadata').first().json.report_date }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "delivery_status",
+              "fieldValue": "failed"
+            }
+          ]
+        }
+      },
+      "id": "299472f9-4b58-4fdd-8a3c-f5e80e85b8ca",
+      "name": "Supabase - Mark Delivery Failed",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        608,
+        256
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "PH4m2AZJix1xy68l",
+          "name": "Supabase account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Generate Report Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Report Metadata": {
+      "main": [
+        [
+          {
+            "node": "PostgreSQL - Get Daily Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PostgreSQL - Get Daily Metrics": {
+      "main": [
+        [
+          {
+            "node": "PostgreSQL - Get Top Source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PostgreSQL - Get Top Source": {
+      "main": [
+        [
+          {
+            "node": "PostgreSQL - Get Top 5 Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PostgreSQL - Get Top 5 Leads": {
+      "main": [
+        [
+          {
+            "node": "PostgreSQL - Get Source Performance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PostgreSQL - Get Source Performance": {
+      "main": [
+        [
+          {
+            "node": "Calculate Report Statistics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Report Statistics": {
+      "main": [
+        [
+          {
+            "node": "Prepare AI Report Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare AI Report Data": {
+      "main": [
+        [
+          {
+            "node": "AI - Generate Business Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI - Generate Business Summary": {
+      "main": [
+        [
+          {
+            "node": "Supabase - Find Existing Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI - Generate Business Summary",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase - Find Existing Report": {
+      "main": [
+        [
+          {
+            "node": "Compose Final Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compose Final Report": {
+      "main": [
+        [
+          {
+            "node": "IF - Report Exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - Report Exists": {
+      "main": [
+        [
+          {
+            "node": "Supabase - Update Daily Report",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Supabase - Create Daily Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase - Update Daily Report": {
+      "main": [
+        [
+          {
+            "node": "Continue After Supabase Save",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase - Create Daily Report": {
+      "main": [
+        [
+          {
+            "node": "Continue After Supabase Save",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Continue After Supabase Save": {
+      "main": [
+        [
+          {
+            "node": "Gmail - Send Daily Lead Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail - Send Daily Lead Report": {
+      "main": [
+        [
+          {
+            "node": "Supabase - Mark Delivery Sent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Supabase - Mark Delivery Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "cd8072a4-6441-423e-bd98-4429c05a2cf9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ee7e3fe2774d85942e6262728227258ce389978fb5031e9fe1e537c17bc1dd21"
+  },
+  "nodeGroups": [],
+  "id": "MEGEl762lCIyUFyC",
+  "tags": []
+}

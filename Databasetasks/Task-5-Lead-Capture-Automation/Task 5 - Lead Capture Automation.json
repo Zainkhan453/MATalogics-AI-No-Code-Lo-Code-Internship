@@ -1,0 +1,357 @@
+{
+  "name": "Task 5 - Lead Capture Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lead-capture",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "24c5fa0f-4557-4f3a-822a-0668ca58037e",
+      "name": "Webhook - Receive Lead",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        96
+      ],
+      "webhookId": "812e2d8a-013a-41d1-bc9f-4f17e0824831"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f-name",
+              "name": "name",
+              "value": "={{ $json.body.name }}",
+              "type": "string"
+            },
+            {
+              "id": "f-email",
+              "name": "email",
+              "value": "={{ $json.body.email }}",
+              "type": "string"
+            },
+            {
+              "id": "f-phone",
+              "name": "phone",
+              "value": "={{ $json.body.phone }}",
+              "type": "string"
+            },
+            {
+              "id": "f-company",
+              "name": "company",
+              "value": "={{ $json.body.company }}",
+              "type": "string"
+            },
+            {
+              "id": "f-message",
+              "name": "message",
+              "value": "={{ $json.body.message }}",
+              "type": "string"
+            },
+            {
+              "id": "f-source",
+              "name": "source",
+              "value": "={{ $json.body.source }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3dc63152-ae6a-4191-ad38-47bf1c8aa6c4",
+      "name": "Extract Lead Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        224,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const lead = $json;\n\nconst requiredFields = [\n  'name',\n  'email',\n  'phone',\n  'company',\n  'message',\n  'source'\n];\n\nconst missingFields = requiredFields.filter((field) => {\n  const value = lead[field];\n\n  return (\n    value === undefined ||\n    value === null ||\n    String(value).trim() === ''\n  );\n});\n\nconst emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nconst errors = [];\n\nif (missingFields.length > 0) {\n  errors.push(`Missing required fields: ${missingFields.join(', ')}`);\n}\n\nif (\n  lead.email &&\n  !emailRegex.test(String(lead.email).trim())\n) {\n  errors.push('Invalid email format');\n}\n\nreturn [\n  {\n    json: {\n      ...lead,\n      isValid: errors.length === 0,\n      errors\n    }\n  }\n];"
+      },
+      "id": "2cc850ef-e6be-4057-9d08-ce6d45d11b7e",
+      "name": "Validate Lead",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "is-valid",
+              "leftValue": "={{ $json.isValid }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8d6a0967-a340-40e5-83a4-661ee5332a0e",
+      "name": "Lead Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        672,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO leads (\n    name,\n    email,\n    phone,\n    company,\n    message,\n    source\n)\nVALUES (\n    $1,\n    $2,\n    $3,\n    $4,\n    $5,\n    $6\n)\nRETURNING\n    id,\n    lead_uuid,\n    name,\n    email,\n    phone,\n    company,\n    message,\n    source,\n    sync_status,\n    created_at;",
+        "options": {
+          "queryReplacement": "={{ [$json.name, $json.email, $json.phone, $json.company, $json.message, $json.source] }}"
+        }
+      },
+      "id": "4b00aa1b-074b-482b-980e-237d766d547c",
+      "name": "Insert Lead - PostgreSQL",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        896,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "pZzol6bydrPh0r44",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "leads",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "lead_uuid",
+              "fieldValue": "={{ $json.lead_uuid }}"
+            },
+            {
+              "fieldId": "name",
+              "fieldValue": "={{ $json.name }}"
+            },
+            {
+              "fieldId": "email",
+              "fieldValue": "={{ $json.email }}"
+            },
+            {
+              "fieldId": "phone",
+              "fieldValue": "={{ $json.phone }}"
+            },
+            {
+              "fieldId": "company",
+              "fieldValue": "={{ $json.company }}"
+            },
+            {
+              "fieldId": "message",
+              "fieldValue": "={{ $json.message }}"
+            },
+            {
+              "fieldId": "source",
+              "fieldValue": "={{ $json.source }}"
+            },
+            {
+              "fieldId": "postgres_id",
+              "fieldValue": "={{ $json.id }}"
+            }
+          ]
+        }
+      },
+      "id": "26ec0711-e352-4043-892c-59c81bde82be",
+      "name": "Sync Lead - Supabase",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        0
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "PH4m2AZJix1xy68l",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE leads\nSET sync_status = 'synced'\nWHERE lead_uuid = $1\nRETURNING\n    id,\n    lead_uuid,\n    name,\n    email,\n    phone,\n    company,\n    message,\n    source,\n    sync_status,\n    created_at;",
+        "options": {
+          "queryReplacement": "={{ [$('Insert Lead - PostgreSQL').item.json.lead_uuid] }}"
+        }
+      },
+      "id": "f84e4863-8d31-4cef-9bf2-c33533632aa7",
+      "name": "Mark Lead Synced",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        1344,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "pZzol6bydrPh0r44",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"message\": \"Lead captured successfully\", \"lead_id\": $json.id, \"lead_uuid\": $json.lead_uuid, \"sync_status\": $json.sync_status } }}",
+        "options": {
+          "responseCode": 201
+        }
+      },
+      "id": "6c7ac445-94c8-456a-b307-03477ee40d3b",
+      "name": "Lead Created Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1568,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": false, \"message\": \"Lead validation failed\", \"errors\": $json.errors } }}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "id": "7a312ffa-67b0-474a-8363-52cb2cadd2d1",
+      "name": "Invalid Lead Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        896,
+        192
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook - Receive Lead": {
+      "main": [
+        [
+          {
+            "node": "Extract Lead Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Lead Data": {
+      "main": [
+        [
+          {
+            "node": "Validate Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Lead": {
+      "main": [
+        [
+          {
+            "node": "Lead Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lead Valid?": {
+      "main": [
+        [
+          {
+            "node": "Insert Lead - PostgreSQL",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Invalid Lead Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Lead - PostgreSQL": {
+      "main": [
+        [
+          {
+            "node": "Sync Lead - Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sync Lead - Supabase": {
+      "main": [
+        [
+          {
+            "node": "Mark Lead Synced",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Lead Synced": {
+      "main": [
+        [
+          {
+            "node": "Lead Created Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "78c6fe71-51bc-4434-a685-653317476512",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ee7e3fe2774d85942e6262728227258ce389978fb5031e9fe1e537c17bc1dd21"
+  },
+  "nodeGroups": [],
+  "id": "Gb46g3IjKh31lczQ",
+  "tags": []
+}

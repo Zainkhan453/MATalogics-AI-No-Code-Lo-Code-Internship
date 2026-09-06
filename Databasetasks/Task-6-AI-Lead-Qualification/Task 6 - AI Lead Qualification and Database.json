@@ -1,0 +1,660 @@
+{
+  "name": "Task 6 - AI Lead Qualification + Database",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ai-lead-qualification",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "bc47f7ae-ab4a-445a-9a56-ffaf93589163",
+      "name": "Webhook - Receive Lead",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        208
+      ],
+      "webhookId": "79db5bfa-4b83-4381-b15a-427d4b9dcdb5"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f-name",
+              "name": "name",
+              "type": "string",
+              "value": "={{ ($json.body.name ?? '').toString().trim() }}"
+            },
+            {
+              "id": "f-email",
+              "name": "email",
+              "type": "string",
+              "value": "={{ ($json.body.email ?? '').toString().trim() }}"
+            },
+            {
+              "id": "f-phone",
+              "name": "phone",
+              "type": "string",
+              "value": "={{ ($json.body.phone ?? '').toString().trim() }}"
+            },
+            {
+              "id": "f-company",
+              "name": "company",
+              "type": "string",
+              "value": "={{ ($json.body.company ?? '').toString().trim() }}"
+            },
+            {
+              "id": "f-message",
+              "name": "message",
+              "type": "string",
+              "value": "={{ ($json.body.message ?? '').toString().trim() }}"
+            },
+            {
+              "id": "f-source",
+              "name": "source",
+              "type": "string",
+              "value": "={{ ($json.body.source ?? '').toString().trim() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b1fda123-13cf-442e-8098-413213f3bd6b",
+      "name": "Normalize Lead Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        224,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const data = $input.item.json;\nconst required = ['name', 'email', 'phone', 'company', 'message', 'source'];\nlet error = null;\nfor (const field of required) {\n  const value = data[field] == null ? '' : String(data[field]).trim();\n  if (value === \"\") { error = field.charAt(0).toUpperCase() + field.slice(1) + \" is required\"; break; }\n}\nif (!error) {\n  const email = String(data.email).trim();\n  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n  if (!emailRegex.test(email)) { error = 'Valid email is required'; }\n}\nreturn {\n  name: data.name,\n  email: data.email,\n  phone: data.phone,\n  company: data.company,\n  message: data.message,\n  source: data.source,\n  is_valid: error === null,\n  validation_error: error,\n};"
+      },
+      "id": "81fb2713-8eed-43a7-b337-f8bc284008f2",
+      "name": "Validate Lead",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "c-valid",
+              "leftValue": "={{ $json.is_valid }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "12cf6151-4568-4099-987c-dcdf45f73bf0",
+      "name": "IF - Lead Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        672,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO leads (\n  name, email, phone, company, message, source,\n  lead_score, lead_status, lead_category, qualification_reason,\n  ai_analyzed_at, sync_status, created_at, updated_at\n)\nVALUES ($1, $2, $3, $4, $5, $6, NULL, 'Pending', NULL, NULL, NULL, 'pending', NOW(), NOW())\nRETURNING id, lead_uuid, name, email, phone, company, message, source,\n  lead_score, lead_status, lead_category, qualification_reason,\n  ai_analyzed_at, sync_status, created_at, updated_at;",
+        "options": {
+          "queryReplacement": "={{ [$json.name, $json.email, $json.phone, $json.company, $json.message, $json.source] }}"
+        }
+      },
+      "id": "52549381-0a5a-41c2-b1dc-28f0333ea0dc",
+      "name": "PostgreSQL - Insert Original Lead",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        896,
+        112
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "pZzol6bydrPh0r44",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analyze the following business lead:\nName: {{ $json.name }}\nEmail: {{ $json.email }}\nPhone: {{ $json.phone }}\nCompany: {{ $json.company }}\nMessage: {{ $json.message }}\nSource: {{ $json.source }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are an AI lead qualification system.\n\nAnalyze only the information provided in the lead.\n\nReturn:\n- lead_score\n- lead_status\n- lead_category\n- qualification_reason\n\nSCORING RULES:\n\n70–100 = Qualified / High Intent\n\nUse this range only when the lead shows strong buying intent, such as:\n- asking for pricing or a quote\n- requesting a demo or meeting\n- asking to start soon\n- giving a specific implementation timeline\n- clearly describing an active business problem that needs to be solved\n- showing urgency or readiness to purchase\n\n40–69 = Nurture / Medium Intent\n\nUse this range when the lead:\n- is exploring options\n- asks for more information\n- shows general business interest\n- is researching solutions\n- describes a possible need but gives no urgency or purchase timeline\n- does not ask for pricing, demo, quote, or immediate action\n\n0–39 = Unqualified / Low Intent\n\nUse this range when the lead:\n- is only casually browsing\n- asks very general questions\n- shows no clear business need\n- shows no buying intent\n- provides vague or weak interest\n\nIMPORTANT:\n\nThe phrase \"exploring automation tools\" or \"would like more information\" by itself MUST NOT be treated as High Intent.\n\nA lead must show clear purchase readiness, urgency, timeline, pricing interest, demo interest, or a specific active business problem before assigning a score of 70 or higher.\n\nAllowed status values:\n- Qualified\n- Nurture\n- Unqualified\n\nAllowed category values:\n- High Intent\n- Medium Intent\n- Low Intent\n\nScore mapping must always be:\n\n70–100:\nQualified\nHigh Intent\n\n40–69:\nNurture\nMedium Intent\n\n0–39:\nUnqualified\nLow Intent\n\nDo not invent missing information.\nKeep qualification_reason concise.\nReturn only the structured output required by the parser."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "id": "d6c27245-8783-422f-9100-bca3113c2258",
+      "name": "AI - Lead Qualification",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        1120,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "id": "6f4ee3c6-a155-4c67-b4a1-c130ecc0d3a4",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1136,
+        336
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "Gateway credits",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\"type\":\"object\",\"properties\":{\"lead_score\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":100},\"lead_status\":{\"type\":\"string\",\"enum\":[\"Qualified\",\"Nurture\",\"Unqualified\"]},\"lead_category\":{\"type\":\"string\",\"enum\":[\"High Intent\",\"Medium Intent\",\"Low Intent\"]},\"qualification_reason\":{\"type\":\"string\"}},\"required\":[\"lead_score\",\"lead_status\",\"lead_category\",\"qualification_reason\"],\"additionalProperties\":false}"
+      },
+      "id": "05baca60-1cb8-4567-9597-dff04c086d07",
+      "name": "Structured Output Parser - Qualification",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1264,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const ai = $json.output || $json;\nconst lead = $(\"PostgreSQL - Insert Original Lead\").item.json;\n\nlet score = parseInt(ai.lead_score, 10);\nif (isNaN(score)) { score = 0; }\nif (score < 0) { score = 0; }\nif (score > 100) { score = 100; }\n\nlet status, category;\nif (score >= 70) { status = 'Qualified'; category = 'High Intent'; }\nelse if (score >= 40) { status = 'Nurture'; category = 'Medium Intent'; }\nelse { status = 'Unqualified'; category = 'Low Intent'; }\n\nreturn {\n  id: lead.id,\n  lead_uuid: lead.lead_uuid,\n  name: lead.name,\n  email: lead.email,\n  phone: lead.phone,\n  company: lead.company,\n  message: lead.message,\n  source: lead.source,\n  lead_score: score,\n  lead_status: status,\n  lead_category: category,\n  qualification_reason: ai.qualification_reason || '',\n};"
+      },
+      "id": "692335cf-56b6-4b27-9b44-6ece4cf9c6d0",
+      "name": "Validate AI Qualification",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1472,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE leads\nSET lead_score = $1, lead_status = $2, lead_category = $3,\n    qualification_reason = $4, ai_analyzed_at = NOW(), updated_at = NOW()\nWHERE lead_uuid = $5\nRETURNING id, lead_uuid, name, email, phone, company, message, source,\n  lead_score, lead_status, lead_category, qualification_reason,\n  ai_analyzed_at, sync_status, created_at, updated_at;",
+        "options": {
+          "queryReplacement": "={{ [$json.lead_score, $json.lead_status, $json.lead_category, $json.qualification_reason, $json.lead_uuid] }}"
+        }
+      },
+      "id": "66c40ae9-1afc-420a-8d9a-a32225857aa1",
+      "name": "PostgreSQL - Update AI Analysis",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        1696,
+        112
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "pZzol6bydrPh0r44",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "leads",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "lead_uuid",
+              "fieldValue": "={{ $json.lead_uuid }}"
+            },
+            {
+              "fieldId": "postgres_id",
+              "fieldValue": "={{ $json.id }}"
+            },
+            {
+              "fieldId": "name",
+              "fieldValue": "={{ $json.name }}"
+            },
+            {
+              "fieldId": "email",
+              "fieldValue": "={{ $json.email }}"
+            },
+            {
+              "fieldId": "phone",
+              "fieldValue": "={{ $json.phone }}"
+            },
+            {
+              "fieldId": "company",
+              "fieldValue": "={{ $json.company }}"
+            },
+            {
+              "fieldId": "message",
+              "fieldValue": "={{ $json.message }}"
+            },
+            {
+              "fieldId": "source",
+              "fieldValue": "={{ $json.source }}"
+            },
+            {
+              "fieldId": "lead_score",
+              "fieldValue": "={{ $json.lead_score }}"
+            },
+            {
+              "fieldId": "lead_status",
+              "fieldValue": "={{ $json.lead_status }}"
+            },
+            {
+              "fieldId": "lead_category",
+              "fieldValue": "={{ $json.lead_category }}"
+            },
+            {
+              "fieldId": "qualification_reason",
+              "fieldValue": "={{ $json.qualification_reason }}"
+            },
+            {
+              "fieldId": "ai_analyzed_at",
+              "fieldValue": "={{ $json.ai_analyzed_at }}"
+            },
+            {
+              "fieldId": "synced_at",
+              "fieldValue": "={{ $now.toISO() }}"
+            }
+          ]
+        }
+      },
+      "id": "ad750614-e8ae-4384-99d3-d7ae5cd9faa2",
+      "name": "Supabase - Sync Enriched Lead",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1920,
+        112
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "PH4m2AZJix1xy68l",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE leads\nSET sync_status = 'synced', updated_at = NOW()\nWHERE lead_uuid = $1\nRETURNING id, lead_uuid, name, email, phone, company, message, source,\n  lead_score, lead_status, lead_category, qualification_reason,\n  ai_analyzed_at, sync_status, created_at, updated_at;",
+        "options": {
+          "queryReplacement": "={{ [$(\"PostgreSQL - Update AI Analysis\").item.json.lead_uuid] }}"
+        }
+      },
+      "id": "575748a0-45e6-406e-a30e-0063751df16b",
+      "name": "PostgreSQL - Mark Synced",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        2144,
+        112
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "pZzol6bydrPh0r44",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "c-score",
+              "leftValue": "={{ $json.lead_score }}",
+              "rightValue": 70,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b8ef378b-1de1-4ff5-a782-dae60a037068",
+      "name": "IF - Score >= 70",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2368,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "manager@example.com",
+        "subject": "=New Qualified Lead: {{ $json.name }} ({{ $json.company }}) - Score {{ $json.lead_score }}",
+        "emailType": "text",
+        "message": "=A new qualified lead has been processed.\n\nLead Name: {{ $json.name }}\nCompany: {{ $json.company }}\nEmail: {{ $json.email }}\nLead Score: {{ $json.lead_score }}\nStatus: {{ $json.lead_status }}\nCategory: {{ $json.lead_category }}\nMessage: {{ $json.message }}\nQualification Reason: {{ $json.qualification_reason }}",
+        "options": {}
+      },
+      "id": "a524ac3a-6102-412c-ae9c-6423d3c3495d",
+      "name": "Qualified Lead Notification",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2592,
+        32
+      ],
+      "webhookId": "3485d405-35ab-4889-a658-2f764d7319ad",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "X9BJynhis4Bum721",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"message\": \"Lead qualified and stored successfully\", \"lead_id\": $(\"PostgreSQL - Mark Synced\").item.json.id, \"lead_uuid\": $(\"PostgreSQL - Mark Synced\").item.json.lead_uuid, \"lead_score\": $(\"PostgreSQL - Mark Synced\").item.json.lead_score, \"lead_status\": $(\"PostgreSQL - Mark Synced\").item.json.lead_status, \"lead_category\": $(\"PostgreSQL - Mark Synced\").item.json.lead_category, \"sync_status\": $(\"PostgreSQL - Mark Synced\").item.json.sync_status } }}",
+        "options": {
+          "responseCode": 201
+        }
+      },
+      "id": "f98a2039-47e5-4ead-84ef-ba6971472824",
+      "name": "Respond - Lead Processed",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        2816,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": false, \"message\": \"Lead validation failed\", \"error\": $json.validation_error } }}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "id": "e1494269-ba96-4853-976e-b625cf6babfc",
+      "name": "Respond - Invalid Lead",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        896,
+        304
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook - Receive Lead": {
+      "main": [
+        [
+          {
+            "node": "Normalize Lead Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Lead Data": {
+      "main": [
+        [
+          {
+            "node": "Validate Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Lead": {
+      "main": [
+        [
+          {
+            "node": "IF - Lead Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - Lead Valid?": {
+      "main": [
+        [
+          {
+            "node": "PostgreSQL - Insert Original Lead",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond - Invalid Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PostgreSQL - Insert Original Lead": {
+      "main": [
+        [
+          {
+            "node": "AI - Lead Qualification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI - Lead Qualification": {
+      "main": [
+        [
+          {
+            "node": "Validate AI Qualification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI - Lead Qualification",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser - Qualification": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI - Lead Qualification",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate AI Qualification": {
+      "main": [
+        [
+          {
+            "node": "PostgreSQL - Update AI Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PostgreSQL - Update AI Analysis": {
+      "main": [
+        [
+          {
+            "node": "Supabase - Sync Enriched Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase - Sync Enriched Lead": {
+      "main": [
+        [
+          {
+            "node": "PostgreSQL - Mark Synced",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PostgreSQL - Mark Synced": {
+      "main": [
+        [
+          {
+            "node": "IF - Score >= 70",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - Score >= 70": {
+      "main": [
+        [
+          {
+            "node": "Qualified Lead Notification",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond - Lead Processed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qualified Lead Notification": {
+      "main": [
+        [
+          {
+            "node": "Respond - Lead Processed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "b8aa5eac-8e1a-44f3-8775-bc1956900fa5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ee7e3fe2774d85942e6262728227258ce389978fb5031e9fe1e537c17bc1dd21"
+  },
+  "nodeGroups": [
+    {
+      "id": "b9c2f501-16fe-4b1a-b3c2-dbb711ea672b",
+      "name": "Ingest & Validate",
+      "nodeIds": [
+        "b1fda123-13cf-442e-8098-413213f3bd6b",
+        "81fb2713-8eed-43a7-b337-f8bc284008f2",
+        "12cf6151-4568-4099-987c-dcdf45f73bf0"
+      ],
+      "description": "Receive the webhook lead, normalize fields, validate required fields and email format."
+    },
+    {
+      "id": "2af1639a-b389-4764-991a-deaec80d2502",
+      "name": "AI Qualification",
+      "nodeIds": [
+        "52549381-0a5a-41c2-b1dc-28f0333ea0dc",
+        "d6c27245-8783-422f-9100-bca3113c2258",
+        "6f4ee3c6-a155-4c67-b4a1-c130ecc0d3a4",
+        "05baca60-1cb8-4567-9597-dff04c086d07",
+        "692335cf-56b6-4b27-9b44-6ece4cf9c6d0",
+        "66c40ae9-1afc-420a-8d9a-a32225857aa1"
+      ],
+      "description": "Store the original lead in PostgreSQL, run AI qualification, deterministically normalize the score/status/category, then update the same PostgreS"
+    },
+    {
+      "id": "fd923563-ca22-498c-8906-4c600746f504",
+      "name": "Sync & Notify",
+      "nodeIds": [
+        "ad750614-e8ae-4384-99d3-d7ae5cd9faa2",
+        "575748a0-45e6-406e-a30e-0063751df16b",
+        "b8ef378b-1de1-4ff5-a782-dae60a037068",
+        "a524ac3a-6102-412c-ae9c-6423d3c3495d",
+        "f98a2039-47e5-4ead-84ef-ba6971472824"
+      ],
+      "description": "Sync the enriched record to Supabase, mark PostgreSQL as synced, notify on qualified leads, and return the final HTTP 201 response."
+    }
+  ],
+  "id": "jD9MKAUYdDrlRf81",
+  "tags": []
+}
